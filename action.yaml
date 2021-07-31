@@ -1,9 +1,22 @@
-name: hello-world
-description: say Hello World
+name: diff
+description: show diff and post a comment
 inputs:
-  name:
+  base:
     description: example input
     required: true
+  head:
+    description: example input
+    required: true
+  comment-header:
+    description: header in a comment to post
+    required: true
+    default: |
+      <!-- diff-action -->
+      ## diff
+  token:
+    description: GitHub token to post a comment on error
+    required: true
+    default: ${{ github.token }}
 runs:
   using: 'node12'
   main: 'dist/index.js'
