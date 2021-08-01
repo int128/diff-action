@@ -14,9 +14,12 @@ inputs:
       <!-- diff-action -->
       ## diff
   token:
-    description: GitHub token to post a comment on error
+    description: GitHub token to post a comment
     required: true
     default: ${{ github.token }}
+outputs:
+  different:
+    description: true if there is any diff, or false
 runs:
   using: 'node12'
   main: 'dist/index.js'

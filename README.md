@@ -58,3 +58,4 @@ Note that this action posts a comment only on a pull request event.
 
 | Name | Description
 |------|------------
+| `different` | `true` if there is any difference, or `false`
