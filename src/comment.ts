@@ -11,6 +11,19 @@ export const comment = async (octokit: Octokit, stat: string, diffs: Diff[], hea
     return
   }
 
+  let details = `
+<details>
+${diffs.map(template).join('\n')}
+</details>
+`
+  // omit too long details
+  // https://github.community/t/maximum-length-for-the-comment-body-in-issues-and-pr/148867
+  if (details.length > 60000) {
+    core.info(`omit too long details (${details.length} chars)`)
+    const runURL = `${github.context.serverUrl}/${github.context.repo.owner}/${github.context.repo.repo}/actions/runs/${github.context.runId}`
+    details = `See the full diff from ${runURL}`
+  }
+
   const body = `
 ${header}
 
@@ -18,9 +31,7 @@ ${header}
 ${stat}
 \`\`\`
 
-<details>
-${diffs.map(template).join('\n')}
-</details>
+${details}
 `
 
   const { data } = await octokit.rest.issues.createComment({
