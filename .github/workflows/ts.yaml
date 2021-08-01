@@ -39,4 +39,5 @@ jobs:
       - name: e2e-test
         uses: ./
         with:
-          name: foo
+          base: tests/fixtures/base
+          head: tests/fixtures/head
