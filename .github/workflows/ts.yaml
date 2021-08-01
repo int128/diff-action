@@ -37,7 +37,9 @@ jobs:
       - run: yarn package
 
       - name: e2e-test
+        id: diff
         uses: ./
         with:
           base: tests/fixtures/base
           head: tests/fixtures/head
+      - run: test ${{ steps.diff.outputs.different }} = true

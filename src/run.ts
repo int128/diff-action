@@ -10,13 +10,18 @@ type Inputs = {
   token: string
 }
 
-export const run = async (inputs: Inputs): Promise<void> => {
+type Outputs = {
+  different: boolean
+}
+
+export const run = async (inputs: Inputs): Promise<Outputs> => {
   const octokit = github.getOctokit(inputs.token)
   const stat = await diff.diffStat(inputs.base, inputs.head)
   if (stat === undefined) {
     core.info('no diff')
-    return
+    return { different: false }
   }
   const diffs = await diff.diff(inputs.base, inputs.head)
   await comment(octokit, stat, diffs, inputs.commentHeader)
+  return { different: true }
 }
