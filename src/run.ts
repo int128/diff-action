@@ -2,10 +2,12 @@ import * as core from '@actions/core'
 import * as github from '@actions/github'
 import { comment } from './comment'
 import * as diff from './diff'
+import { addLabels, removeLabels } from './label'
 
 type Inputs = {
   base: string
   head: string
+  label: string[]
   commentHeader: string
   token: string
 }
@@ -22,8 +24,11 @@ export const run = async (inputs: Inputs): Promise<Outputs> => {
   core.endGroup()
   if (stat === undefined) {
     core.info('no diff')
+    await removeLabels(octokit, inputs.label)
     return { different: false }
   }
+
+  await addLabels(octokit, inputs.label)
 
   core.startGroup('diff')
   const diffs = await diff.diff(inputs.base, inputs.head)

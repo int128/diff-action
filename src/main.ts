@@ -6,6 +6,7 @@ const main = async (): Promise<void> => {
     const outputs = await run({
       base: core.getInput('base', { required: true }),
       head: core.getInput('head', { required: true }),
+      label: core.getMultilineInput('label', { required: false }),
       commentHeader: core.getInput('comment-header', { required: true }),
       token: core.getInput('token', { required: true }),
     })

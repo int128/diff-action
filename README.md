@@ -43,13 +43,24 @@ jobs:
 
 Note that this action posts a comment only on a pull request event.
 
+To add label(s) if there is difference or remove it if not:
+
+```yaml
+      - uses: int128/diff-action@v1
+        with:
+          base: ${{ steps.kustomize-base.outputs.directory }}
+          head: ${{ steps.kustomize-head.outputs.directory }}
+          label: manifest-changed
+```
+
 
 ## Inputs
 
 | Name | Required | Description
 |------|----------|-------------
-| `base` | yes | base path
-| `head` | yes | head path
+| `base` | yes | base path (multiline)
+| `head` | yes | head path (multiline)
+| `label` | no | label(s) to add/remove to indicate diff (multiline)
 | `comment-header` | no | header in a comment to post
 | `token` | no | GitHub token to post a comment
 

@@ -7,6 +7,9 @@ inputs:
   head:
     description: example input
     required: true
+  label:
+    description: label(s) to add/remove to indicate diff
+    required: false
   comment-header:
     description: header in a comment to post
     required: true
