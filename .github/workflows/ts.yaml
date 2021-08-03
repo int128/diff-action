@@ -36,10 +36,20 @@ jobs:
       - run: yarn build
       - run: yarn package
 
-      - name: e2e-test
+      - name: e2e-test (diff)
         id: diff
         uses: ./
         with:
           base: tests/fixtures/base
           head: tests/fixtures/head
+          label: changed
       - run: test ${{ steps.diff.outputs.different }} = true
+
+      - name: e2e-test (no-diff)
+        id: no-diff
+        uses: ./
+        with:
+          base: tests/fixtures/head
+          head: tests/fixtures/head
+          label: changed
+      - run: test ${{ steps.no-diff.outputs.different }} = false
