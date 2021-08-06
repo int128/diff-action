@@ -24,7 +24,7 @@ ${diffs.map(template).join('\n')}
     details = `See the full diff from ${runURL}`
   }
 
-  const body = `
+  const body = `\
 ${header}
 
 \`\`\`
