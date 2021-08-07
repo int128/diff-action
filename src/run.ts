@@ -9,6 +9,7 @@ type Inputs = {
   head: string
   label: string[]
   commentHeader: string
+  commentFooter: string
   token: string
 }
 
@@ -34,6 +35,6 @@ export const run = async (inputs: Inputs): Promise<Outputs> => {
   const diffs = await diff.diff(inputs.base, inputs.head)
   core.endGroup()
 
-  await comment(octokit, stat, diffs, inputs.commentHeader)
+  await comment(octokit, stat, diffs, { header: inputs.commentHeader, footer: inputs.commentFooter })
   return { different: true }
 }

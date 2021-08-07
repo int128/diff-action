@@ -61,7 +61,8 @@ To add label(s) if there is difference or remove it if not:
 | `base` | yes | base path (multiline)
 | `head` | yes | head path (multiline)
 | `label` | no | label(s) to add/remove to indicate diff (multiline)
-| `comment-header` | no | header in a comment to post
+| `comment-header` | no | header of a comment to post
+| `comment-footer` | no | footer of a comment to post
 | `token` | no | GitHub token to post a comment
 
 

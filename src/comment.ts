@@ -5,7 +5,12 @@ import { Diff } from './diff'
 
 type Octokit = InstanceType<typeof GitHub>
 
-export const comment = async (octokit: Octokit, stat: string, diffs: Diff[], header: string): Promise<void> => {
+type CommentOptions = {
+  header: string
+  footer: string
+}
+
+export const comment = async (octokit: Octokit, stat: string, diffs: Diff[], o: CommentOptions): Promise<void> => {
   if (github.context.payload.pull_request === undefined) {
     core.info(`ignore non pull-request event: ${github.context.eventName}`)
     return
@@ -25,14 +30,15 @@ ${diffs.map(template).join('\n')}
   }
 
   const body = `\
-${header}
+${o.header}
 
 \`\`\`
 ${stat}
 \`\`\`
 
 ${details}
-`
+
+${o.footer}`
 
   const { data } = await octokit.rest.issues.createComment({
     owner: github.context.repo.owner,
