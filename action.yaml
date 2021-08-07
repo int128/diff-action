@@ -11,11 +11,15 @@ inputs:
     description: label(s) to add/remove to indicate diff
     required: false
   comment-header:
-    description: header in a comment to post
-    required: true
+    description: header of a comment to post
+    required: false
+    default: |
+      ## diff
+  comment-footer:
+    description: footer of a comment to post
+    required: false
     default: |
       <!-- diff-action -->
-      ## diff
   token:
     description: GitHub token to post a comment
     required: true

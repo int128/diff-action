@@ -7,7 +7,8 @@ const main = async (): Promise<void> => {
       base: core.getInput('base', { required: true }),
       head: core.getInput('head', { required: true }),
       label: core.getMultilineInput('label', { required: false }),
-      commentHeader: core.getInput('comment-header', { required: true }),
+      commentHeader: core.getInput('comment-header'),
+      commentFooter: core.getInput('comment-footer'),
       token: core.getInput('token', { required: true }),
     })
     core.setOutput('different', outputs.different)
