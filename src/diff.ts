@@ -43,7 +43,7 @@ export const parseDiffLines = (lines: string[]): Diff[] => {
 
 export const diffStat = async (base: string, head: string): Promise<string | void> => {
   const lines: string[] = []
-  const code = await exec.exec('git', ['diff', '--no-index', '--stat', '--stat-width=0', '--no-color', base, head], {
+  const code = await exec.exec('git', ['diff', '--no-index', '--stat', '--stat-width=160', '--no-color', base, head], {
     ignoreReturnCode: true,
     listeners: {
       stdline: (line) => lines.push(line),
