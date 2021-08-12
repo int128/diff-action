@@ -20,6 +20,10 @@ index 6ff0827..59426b2 100644
            allowPrivilegeEscalation: false
        securityContext:
 `.split('\n')
-  const diffs = parseDiffLines(fixture)
+  const base = '/tmp/kustomize-action-td0BL2'
+  const head = '/tmp/kustomize-action-F1O9dM'
+  const diffs = parseDiffLines(fixture, base, head)
   expect(diffs.length).toBe(1)
+  expect(diffs[0].baseRelativePath).toBe('/config/default/apps_v1_deployment_argocd-commenter-controller-manager.yaml')
+  expect(diffs[0].headRelativePath).toBe('/config/default/apps_v1_deployment_argocd-commenter-controller-manager.yaml')
 })
