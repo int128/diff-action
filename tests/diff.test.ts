@@ -1,6 +1,6 @@
 import { parseDiffLines } from '../src/diff'
 
-test('parse single diff', async () => {
+test('parse single diff', () => {
   const fixture = `\
 diff --git a/tmp/kustomize-action-td0BL2/config/default/apps_v1_deployment_argocd-commenter-controller-manager.yaml b/tmp/kustomize-action-F1O9dM/config/default/apps_v1_deployment_argocd-commenter-controller-manager.yaml
 index 6ff0827..59426b2 100644

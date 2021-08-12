@@ -1,8 +1,8 @@
 import * as core from '@actions/core'
-import * as github from '@actions/github'
-import { comment } from './comment'
 import * as diff from './diff'
+import * as github from '@actions/github'
 import { addLabels, removeLabels } from './label'
+import { comment } from './comment'
 
 type Inputs = {
   base: string
