@@ -2,6 +2,8 @@ import * as core from '@actions/core'
 import * as exec from '@actions/exec'
 
 export type Diff = {
+  baseRelativePath?: string
+  headRelativePath?: string
   content: string
 }
 
@@ -20,25 +22,33 @@ export const diff = async (base: string, head: string): Promise<Diff[]> => {
   if (code > 1) {
     throw new Error(`git-diff failed with exit code ${code}`)
   }
-  return parseDiffLines(lines)
+  return parseDiffLines(lines, base, head)
 }
 
-export const parseDiffLines = (lines: string[]): Diff[] => {
-  const diffs: Diff[] = []
-  let current: string[] = []
+export const parseDiffLines = (lines: string[], base: string, head: string): Diff[] => {
+  type Chunk = string[]
+  let chunk: Chunk = []
+  const chunks: Chunk[] = []
   for (const line of lines) {
     if (line.startsWith('diff ')) {
-      if (current.length > 0) {
-        diffs.push({ content: current.join('\n') })
-      }
-      current = []
+      chunks.push(chunk)
+      chunk = []
     }
-    current.push(line)
+    chunk.push(line)
   }
-  if (current.length > 0) {
-    diffs.push({ content: current.join('\n') })
-  }
-  return diffs
+  chunks.push(chunk)
+  return chunks
+    .filter((c) => c.length > 0)
+    .map((c) => {
+      const e = c[0].split(/ +/)
+      const h = e.pop()?.split(head).pop()
+      const b = e.pop()?.split(base).pop()
+      return {
+        baseRelativePath: b,
+        headRelativePath: h,
+        content: c.join('\n'),
+      }
+    })
 }
 
 export const diffStat = async (base: string, head: string): Promise<string | void> => {

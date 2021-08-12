@@ -51,6 +51,8 @@ ${o.footer}`
 
 const template = (e: Diff): string => {
   return `
+${e.headRelativePath ? `### ${e.headRelativePath}` : ''}
+
 \`\`\`diff
 ${e.content}
 \`\`\`
