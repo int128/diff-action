@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
-import { GitHub } from '@actions/github/lib/utils'
 import { Diff } from './diff'
+import { GitHub } from '@actions/github/lib/utils'
 
 type Octokit = InstanceType<typeof GitHub>
 
