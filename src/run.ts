@@ -20,21 +20,17 @@ type Outputs = {
 export const run = async (inputs: Inputs): Promise<Outputs> => {
   const octokit = github.getOctokit(inputs.token)
 
-  core.startGroup('diff --stat')
-  const stat = await diff.diffStat(inputs.base, inputs.head)
+  core.startGroup('diff')
+  const diffs = await diff.diff(inputs.base, inputs.head)
   core.endGroup()
-  if (stat === undefined) {
+
+  if (diffs.length === 0) {
     core.info('no diff')
     await removeLabels(octokit, inputs.label)
     return { different: false }
   }
 
+  await comment(octokit, diffs, { header: inputs.commentHeader, footer: inputs.commentFooter })
   await addLabels(octokit, inputs.label)
-
-  core.startGroup('diff')
-  const diffs = await diff.diff(inputs.base, inputs.head)
-  core.endGroup()
-
-  await comment(octokit, stat, diffs, { header: inputs.commentHeader, footer: inputs.commentFooter })
   return { different: true }
 }
