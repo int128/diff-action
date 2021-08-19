@@ -10,7 +10,7 @@ type CommentOptions = {
   footer: string
 }
 
-export const comment = async (octokit: Octokit, stat: string, diffs: Diff[], o: CommentOptions): Promise<void> => {
+export const comment = async (octokit: Octokit, diffs: Diff[], o: CommentOptions): Promise<void> => {
   if (github.context.payload.pull_request === undefined) {
     core.info(`ignore non pull-request event: ${github.context.eventName}`)
     return
@@ -32,9 +32,10 @@ ${diffs.map(template).join('\n')}
   const body = `\
 ${o.header}
 
-\`\`\`
-${stat}
-\`\`\`
+${diffs
+  .map(summary)
+  .filter((e) => e)
+  .join('\n')}
 
 ${details}
 
@@ -49,12 +50,22 @@ ${o.footer}`
   core.info(`created a comment as ${data.html_url}`)
 }
 
-const template = (e: Diff): string => {
-  return `
+const summary = (e: Diff) => {
+  if (e.headRelativePath !== undefined && e.baseRelativePath !== undefined) {
+    return `- ${e.headRelativePath} (changed)`
+  }
+  if (e.headRelativePath !== undefined) {
+    return `- ${e.headRelativePath} (added)`
+  }
+  if (e.baseRelativePath !== undefined) {
+    return `- ${e.baseRelativePath} (deleted)`
+  }
+}
+
+const template = (e: Diff) => `
 ${e.headRelativePath ? `### ${e.headRelativePath}` : ''}
 
 \`\`\`diff
 ${e.content}
 \`\`\`
 `
-}

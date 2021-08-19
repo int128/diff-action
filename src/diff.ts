@@ -41,8 +41,8 @@ export const parseDiffLines = (lines: string[], base: string, head: string): Dif
     .filter((c) => c.length > 0)
     .map((c) => {
       const e = c[0].split(/ +/)
-      const h = e.pop()?.split(head).pop()
-      const b = e.pop()?.split(base).pop()
+      const h = parseDiffPath(e.pop(), head)
+      const b = parseDiffPath(e.pop(), base)
       return {
         baseRelativePath: b,
         headRelativePath: h,
@@ -51,20 +51,22 @@ export const parseDiffLines = (lines: string[], base: string, head: string): Dif
     })
 }
 
-export const diffStat = async (base: string, head: string): Promise<string | void> => {
-  const lines: string[] = []
-  const code = await exec.exec('git', ['diff', '--no-index', '--numstat', '--no-color', base, head], {
-    ignoreReturnCode: true,
-    listeners: {
-      stdline: (line) => lines.push(line),
-    },
-  })
-  core.info(`git-diff returned exit code ${code}`)
-  if (code === 0) {
-    return
+// parse path in diff output, e.g.,
+// a/path/to/diff-action/tests/fixtures/base/deployment.yaml
+const parseDiffPath = (s: string | undefined, prefix: string): string | undefined => {
+  if (s === undefined) {
+    return undefined
   }
-  if (code > 1) {
-    throw new Error(`git-diff failed with exit code ${code}`)
+  const a = s.split(prefix)
+  if (a.length < 2) {
+    return undefined
   }
-  return lines.join('\n')
+  const relative = a.pop()
+  if (relative === undefined) {
+    return undefined
+  }
+  if (relative.startsWith('/')) {
+    return relative.substring(1)
+  }
+  return relative
 }
