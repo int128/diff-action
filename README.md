@@ -2,16 +2,16 @@
 
 This is an action to run `diff` and post a comment.
 
+Here is an example,
+
+![image](https://user-images.githubusercontent.com/321266/130011226-7487cbd9-4a1f-4a04-ae6c-7cb9456324ab.png)
+
 
 ## Getting Started
 
 ### Usecase: show diff of rendered manifests on pull request
 
 When you use `kustomize build` in your CI/CD pipeline, it would be useful if you can see the rendered diff on a pull request.
-For example,
-
-![screenshot](https://user-images.githubusercontent.com/321266/127755329-5f9f81e3-af05-48e8-91dd-a99fefe557e4.png)
-
 To run this action with [int128/kustomize-action](https://github.com/int128/kustomize-action):
 
 ```yaml
