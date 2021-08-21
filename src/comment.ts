@@ -52,13 +52,13 @@ ${o.footer}`
 
 const summary = (e: Diff) => {
   if (e.headRelativePath !== undefined && e.baseRelativePath !== undefined) {
-    return `- ${e.headRelativePath} (changed)`
+    return `- ${e.headRelativePath}`
   }
   if (e.headRelativePath !== undefined) {
-    return `- ${e.headRelativePath} (added)`
+    return `- ${e.headRelativePath} **(New)**`
   }
   if (e.baseRelativePath !== undefined) {
-    return `- ${e.baseRelativePath} (deleted)`
+    return `- ${e.baseRelativePath} **(Deleted)**`
   }
 }
 
