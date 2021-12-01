@@ -18,7 +18,9 @@ export const comment = async (octokit: Octokit, diffs: Diff[], o: CommentOptions
 
   let details = `
 <details>
+
 ${diffs.map(template).join('\n')}
+
 </details>
 `
   // omit too long details
@@ -62,10 +64,17 @@ const summary = (e: Diff) => {
   }
 }
 
-const template = (e: Diff) => `
-${e.headRelativePath ? `### ${e.headRelativePath}` : ''}
+const template = (e: Diff) => {
+  const lines: string[] = []
 
-\`\`\`diff
-${e.content}
-\`\`\`
-`
+  if (e.headRelativePath) {
+    lines.push(`### ${e.headRelativePath}`)
+  } else if (e.baseRelativePath) {
+    lines.push(`### ${e.baseRelativePath}`)
+  }
+
+  lines.push('```diff')
+  lines.push(e.content)
+  lines.push('```')
+  return lines.join('\n')
+}
