@@ -58,12 +58,12 @@ To add label(s) if there is difference or remove it if not:
 
 | Name | Required | Description
 |------|----------|-------------
-| `base` | yes | base path (multiline)
-| `head` | yes | head path (multiline)
-| `label` | no | label(s) to add/remove to indicate diff (multiline)
-| `comment-header` | no | header of a comment to post
-| `comment-footer` | no | footer of a comment to post
-| `token` | no | GitHub token to post a comment
+| `base` | (required) | base path (multiline)
+| `head` | (required) | head path (multiline)
+| `label` | - | label(s) to add/remove to indicate diff (multiline)
+| `comment-header` | - | header of a comment to post
+| `comment-footer` | - | footer of a comment to post
+| `token` | `github.token` | GitHub token to post a comment
 
 
 ## Outputs
