@@ -1,18 +1,13 @@
 # diff-action [![ts](https://github.com/int128/diff-action/actions/workflows/ts.yaml/badge.svg)](https://github.com/int128/diff-action/actions/workflows/ts.yaml)
 
-This is an action to run `diff` and post a comment.
-
-Here is an example,
-
-![image](https://user-images.githubusercontent.com/321266/130011226-7487cbd9-4a1f-4a04-ae6c-7cb9456324ab.png)
+This is an action to run `diff` command and post it to a comment.
 
 
-## Getting Started
+## Show diff of rendered manifests
 
-### Usecase: show diff of rendered manifests on pull request
+If you use `kustomize build` in your CI/CD pipeline, it would be useful if you can see the rendered diff on a pull request.
 
-When you use `kustomize build` in your CI/CD pipeline, it would be useful if you can see the rendered diff on a pull request.
-To run this action with [int128/kustomize-action](https://github.com/int128/kustomize-action):
+To build manifests with [int128/kustomize-action](https://github.com/int128/kustomize-action) and show diff of it:
 
 ```yaml
 jobs:
@@ -41,7 +36,12 @@ jobs:
           head: ${{ steps.kustomize-head.outputs.directory }}
 ```
 
-Note that this action posts a comment only on a pull request event.
+Here is an example,
+
+![image](https://user-images.githubusercontent.com/321266/130011226-7487cbd9-4a1f-4a04-ae6c-7cb9456324ab.png)
+
+
+### Label to indicate the change
 
 To add label(s) if there is difference or remove it if not:
 
@@ -54,7 +54,11 @@ To add label(s) if there is difference or remove it if not:
 ```
 
 
-## Inputs
+## Specification
+
+This action posts a comment on pull request event only.
+
+### Inputs
 
 | Name | Required | Description
 |------|----------|-------------
@@ -66,7 +70,7 @@ To add label(s) if there is difference or remove it if not:
 | `token` | `github.token` | GitHub token to post a comment
 
 
-## Outputs
+### Outputs
 
 | Name | Description
 |------|------------
