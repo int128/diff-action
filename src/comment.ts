@@ -80,6 +80,7 @@ const createOrUpdate = async (octokit: Octokit, issue_number: number, body: stri
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
     issue_number,
+    per_page: 100,
   })
 
   for (const c of comments) {
