@@ -26,29 +26,35 @@ export const diff = async (base: string, head: string): Promise<Diff[]> => {
 }
 
 export const parseDiffLines = (lines: string[], base: string, head: string): Diff[] => {
-  type Chunk = string[]
-  let chunk: Chunk = []
-  const chunks: Chunk[] = []
+  const chunks = splitDiffLinesToChunks(lines)
+  return chunks.map((chunk) => {
+    const e = chunk[0].split(/ +/)
+    const h = parseDiffPath(e.pop(), head)
+    const b = parseDiffPath(e.pop(), base)
+    return {
+      baseRelativePath: b,
+      headRelativePath: h,
+      content: chunk.join('\n'),
+    }
+  })
+}
+
+type Chunk = string[]
+
+const splitDiffLinesToChunks = (lines: string[]): Chunk[] => {
+  let current: Chunk = []
+  const chunks: Chunk[] = [current]
   for (const line of lines) {
     if (line.startsWith('diff ')) {
-      chunks.push(chunk)
-      chunk = []
+      current = [line]
+      chunks.push(current)
+      continue
     }
-    chunk.push(line)
+
+    current.push(line)
   }
-  chunks.push(chunk)
-  return chunks
-    .filter((c) => c.length > 0)
-    .map((c) => {
-      const e = c[0].split(/ +/)
-      const h = parseDiffPath(e.pop(), head)
-      const b = parseDiffPath(e.pop(), base)
-      return {
-        baseRelativePath: b,
-        headRelativePath: h,
-        content: c.join('\n'),
-      }
-    })
+
+  return chunks.filter((chunk) => chunk.length > 0)
 }
 
 // parse path in diff output, e.g.,
