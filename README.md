@@ -1,11 +1,22 @@
 # diff-action [![ts](https://github.com/int128/diff-action/actions/workflows/ts.yaml/badge.svg)](https://github.com/int128/diff-action/actions/workflows/ts.yaml)
 
-This is an action to run `diff` command and post it to a comment.
+This is an action to compute a diff between head and base, and post it to a comment.
 
 
-## Show diff of rendered manifests
+## Getting Started
 
-If you use `kustomize build` in your CI/CD pipeline, it would be useful if you can see the rendered diff on a pull request.
+To compute the diff between `old-directory` and `new-directory`:
+
+```yaml
+      - uses: int128/diff-action@v1
+        with:
+          base: old-directory
+          head: new-directory
+```
+
+### Show diff of generated manifests
+
+If you use `kustomize build` in your CI/CD pipeline, it would be useful if you can see the diff on a pull request.
 
 To build manifests with [int128/kustomize-action](https://github.com/int128/kustomize-action) and show diff of it:
 
@@ -36,10 +47,9 @@ jobs:
           head: ${{ steps.kustomize-head.outputs.directory }}
 ```
 
-Here is an example,
+Here is an example.
 
-![image](https://user-images.githubusercontent.com/321266/130011226-7487cbd9-4a1f-4a04-ae6c-7cb9456324ab.png)
-
+<img width="920" alt="image" src="https://user-images.githubusercontent.com/321266/169682181-b16df0b8-429d-4adc-8bca-a35276ab2b3d.png">
 
 ### Label to indicate the change
 
