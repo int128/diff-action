@@ -27,16 +27,7 @@ export const diff = async (base: string, head: string): Promise<Diff[]> => {
 
 export const parseDiffLines = (lines: string[], base: string, head: string): Diff[] => {
   const chunks = splitDiffLinesToChunks(lines)
-  return chunks.map((chunk) => {
-    const e = chunk[0].split(/ +/)
-    const h = parseDiffPath(e.pop(), head)
-    const b = parseDiffPath(e.pop(), base)
-    return {
-      baseRelativePath: b,
-      headRelativePath: h,
-      content: chunk.join('\n'),
-    }
-  })
+  return chunks.map((chunk) => parseChunk(chunk, base, head))
 }
 
 type Chunk = string[]
@@ -50,11 +41,23 @@ const splitDiffLinesToChunks = (lines: string[]): Chunk[] => {
       chunks.push(current)
       continue
     }
-
     current.push(line)
   }
-
   return chunks.filter((chunk) => chunk.length > 0)
+}
+
+const parseChunk = (chunk: Chunk, base: string, head: string): Diff => {
+  // first line should be an indicator, e.g.,
+  // diff --git a/tests/fixtures/head/bar.txt b/tests/fixtures/head/bar.txt
+  const diffIndicator = chunk[0].split(/ +/)
+  const h = diffIndicator.pop()
+  const b = diffIndicator.pop()
+
+  return {
+    baseRelativePath: parseDiffPath(b, base),
+    headRelativePath: parseDiffPath(h, head),
+    content: chunk.join('\n'),
+  }
 }
 
 // parse path in diff output, e.g.,
