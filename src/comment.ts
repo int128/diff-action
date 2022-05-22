@@ -60,17 +60,20 @@ const summary = (e: Diff) => {
     return `- ${e.headRelativePath} **(New)**`
   }
   if (e.baseRelativePath !== undefined) {
-    return `- ${e.baseRelativePath} **(Deleted)**`
+    return `- ${e.baseRelativePath} **(Deleted)** :warning:`
   }
 }
 
 const template = (e: Diff) => {
   const lines: string[] = []
 
-  if (e.headRelativePath) {
+  if (e.headRelativePath !== undefined && e.baseRelativePath !== undefined) {
     lines.push(`### ${e.headRelativePath}`)
-  } else if (e.baseRelativePath) {
+  } else if (e.headRelativePath !== undefined) {
+    lines.push(`### ${e.headRelativePath}`)
+  } else if (e.baseRelativePath !== undefined) {
     lines.push(`### ${e.baseRelativePath}`)
+    lines.push(`:warning: Deleted`)
   }
 
   lines.push('```diff')
