@@ -53,10 +53,11 @@ const parseChunk = (chunk: Chunk, base: string, head: string): Diff => {
   const h = diffIndicator.pop()
   const b = diffIndicator.pop()
 
+  const diffBody = trimHeaderOfChunk(chunk)
   return {
     baseRelativePath: parseDiffPath(b, base),
     headRelativePath: parseDiffPath(h, head),
-    content: chunk.join('\n'),
+    content: diffBody.join('\n'),
   }
 }
 
@@ -78,4 +79,12 @@ const parseDiffPath = (s: string | undefined, prefix: string): string | undefine
     return relative.substring(1)
   }
   return relative
+}
+
+const trimHeaderOfChunk = (chunk: Chunk): Chunk => {
+  const index = chunk.findIndex((line) => line.startsWith('-') || line.startsWith('+'))
+  if (index < 0) {
+    return chunk
+  }
+  return chunk.slice(index)
 }
