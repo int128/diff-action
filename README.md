@@ -49,7 +49,7 @@ jobs:
 
 Here is an example.
 
-<img width="920" alt="image" src="https://user-images.githubusercontent.com/321266/169682181-b16df0b8-429d-4adc-8bca-a35276ab2b3d.png">
+<img width="920" alt="image" src="https://user-images.githubusercontent.com/321266/169690472-a74d764d-3567-4d5b-adc4-e8efc9dd4d6c.png">
 
 ### Label to indicate the change
 
