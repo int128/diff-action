@@ -31,6 +31,10 @@ ${diffs.map(template).join('\n')}
     details = `See the full diff from ${runURL}`
   }
 
+  const key = `\
+<!-- ${github.context.workflow}/${github.context.job}/${github.context.action} -->
+${o.footer}`
+
   const body = `\
 ${o.header}
 
@@ -41,15 +45,9 @@ ${diffs
 
 ${details}
 
-${o.footer}`
+${key}`
 
-  const { data } = await octokit.rest.issues.createComment({
-    owner: github.context.repo.owner,
-    repo: github.context.repo.repo,
-    issue_number: github.context.payload.pull_request.number,
-    body,
-  })
-  core.info(`created a comment as ${data.html_url}`)
+  await createOrUpdate(octokit, github.context.payload.pull_request.number, key, body)
 }
 
 const summary = (e: Diff) => {
@@ -77,4 +75,36 @@ const template = (e: Diff) => {
   lines.push(e.content)
   lines.push('```')
   return lines.join('\n')
+}
+
+const createOrUpdate = async (octokit: Octokit, issue_number: number, key: string, body: string) => {
+  core.info(`finding a comment by ${key}`)
+  const comments = await octokit.paginate(octokit.rest.issues.listComments, {
+    owner: github.context.repo.owner,
+    repo: github.context.repo.repo,
+    issue_number,
+    per_page: 100,
+  })
+
+  for (const c of comments) {
+    if (c.body?.includes(key)) {
+      const { data } = await octokit.rest.issues.updateComment({
+        owner: github.context.repo.owner,
+        repo: github.context.repo.repo,
+        issue_number,
+        comment_id: c.id,
+        body,
+      })
+      core.info(`updated the comment as ${data.html_url}`)
+      return
+    }
+  }
+
+  const { data } = await octokit.rest.issues.createComment({
+    owner: github.context.repo.owner,
+    repo: github.context.repo.repo,
+    issue_number,
+    body,
+  })
+  core.info(`created a comment as ${data.html_url}`)
 }
