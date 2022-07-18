@@ -13,4 +13,4 @@ const main = async (): Promise<void> => {
   core.setOutput('different', outputs.different)
 }
 
-main().catch((e) => core.setFailed(e instanceof Error ? e.message : JSON.stringify(e)))
+main().catch((e) => core.setFailed(e instanceof Error ? e : String(e)))
