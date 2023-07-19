@@ -31,6 +31,10 @@ ${diffs.map(template).join('\n')}
     details = `See the full diff from ${runURL}`
   }
 
+  const key = `\
+<!-- ${github.context.workflow}/${github.context.job}/${github.context.action} -->
+${o.footer}`
+
   const body = `\
 ${o.header}
 
@@ -41,15 +45,41 @@ ${diffs
 
 ${details}
 
-${o.footer}`
+${key}`
 
-  const { data } = await octokit.rest.issues.createComment({
+  // Find the previous comment with the same key
+  const previousComment = await octokit.rest.issues.getComments({
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
     issue_number: github.context.payload.pull_request.number,
-    body,
+    q: `body:${key}`,
   })
-  core.info(`created a comment as ${data.html_url}`)
+
+  // If the previous comment exists, update it
+  if (previousComment.length > 0) {
+    const commentID = previousComment[0].id
+    core.info(`updating comment ${commentID}`)
+    await octokit.rest.issues.updateComment({
+      owner: github.context.repo.owner,
+      repo: github.context.repo.repo,
+      issue_number: github.context.payload.pull_request.number,
+      comment_id: commentID,
+      body,
+    })
+    // log info updated previous comment htmlURL
+    core.info(`updated previous comment ${previousComment[0].html_url}`)
+  } else {
+    // Otherwise, create a new comment
+    core.info(`creating new comment`)
+    const { data } = await octokit.rest.issues.createComment({
+      owner: github.context.repo.owner,
+      repo: github.context.repo.repo,
+      issue_number: github.context.payload.pull_request.number,
+      body,
+    })
+    // log info created new comment htmlURL
+    core.info(`created new comment ${data.html_url}`)
+  }
 }
 
 const summary = (e: Diff) => {
