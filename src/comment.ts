@@ -5,10 +5,10 @@ import { GitHub } from '@actions/github/lib/utils'
 
 type Octokit = InstanceType<typeof GitHub>
 
-type CommentOptions = {
-  header: string
-  footer: string
-}
+  type CommentOptions = {
+    header: string
+    footer: string
+  }
 
 export const comment = async (octokit: Octokit, diffs: Diff[], o: CommentOptions): Promise<void> => {
   if (github.context.payload.pull_request === undefined) {
@@ -33,78 +33,81 @@ ${diffs.map(template).join('\n')}
 
   const key = `\
 <!-- ${github.context.workflow}/${github.context.job}/${github.context.action} -->
-${o.footer}`
+    ${o.footer}`
 
   const body = `\
-${o.header}
+  ${o.header}
 
-${diffs
-  .map(summary)
-  .filter((e) => e)
-  .join('\n')}
+  ${diffs
+      .map(summary)
+      .filter((e) => e)
+      .join('\n')}
 
-${details}
+  ${details}
 
-${key}`
+  ${key}`
 
   // Find the previous comment with the same key
-  const previousComment: Comment = await octokit.rest.issues.getComments({
+  const response = await octokit.rest.issues.getComments({
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
     issue_number: github.context.payload.pull_request.number,
     q: `body:${key}`,
   })
 
-  // If the previous comment exists, update it
-  if (previousComment.length > 0) {
-    const commentID = previousComment[0].id
-    core.info(`updating comment ${commentID}`)
-    await octokit.rest.issues.updateComment({
-      owner: github.context.repo.owner,
-      repo: github.context.repo.repo,
-      issue_number: github.context.payload.pull_request.number,
-      comment_id: commentID,
-      body,
-    })
-    // log info updated previous comment htmlURL
-    core.info(`updated previous comment ${previousComment[0].html_url}`)
-  } else {
-    // Otherwise, create a new comment
-    core.info(`creating new comment`)
-    const { data } = await octokit.rest.issues.createComment({
-      owner: github.context.repo.owner,
-      repo: github.context.repo.repo,
-      issue_number: github.context.payload.pull_request.number,
-      body,
-    })
-    // log info created new comment htmlURL
-    core.info(`created new comment ${data.html_url}`)
-  }
-}
+  if (response && response.data) {
+    const previousComment = response.data;
 
-const summary = (e: Diff) => {
-  if (e.headRelativePath !== undefined && e.baseRelativePath !== undefined) {
-    return `- ${e.headRelativePath}`
-  }
-  if (e.headRelativePath !== undefined) {
-    return `- ${e.headRelativePath} **(New)**`
-  }
-  if (e.baseRelativePath !== undefined) {
-    return `- ${e.baseRelativePath} **(Deleted)**`
-  }
-}
-
-const template = (e: Diff) => {
-  const lines: string[] = []
-
-  if (e.headRelativePath) {
-    lines.push(`### ${e.headRelativePath}`)
-  } else if (e.baseRelativePath) {
-    lines.push(`### ${e.baseRelativePath}`)
+    // If the previous comment exists, update it
+    if (previousComment.length > 0) {
+      const commentID = previousComment[0].id
+      core.info(`updating comment ${commentID}`)
+      await octokit.rest.issues.updateComment({
+        owner: github.context.repo.owner,
+        repo: github.context.repo.repo,
+        issue_number: github.context.payload.pull_request.number,
+        comment_id: commentID,
+        body,
+      })
+      // log info updated previous comment htmlURL
+      core.info(`updated previous comment ${previousComment[0].html_url}`)
+    } else {
+      // Otherwise, create a new comment
+      core.info(`creating new comment`)
+      const { data } = await octokit.rest.issues.createComment({
+        owner: github.context.repo.owner,
+        repo: github.context.repo.repo,
+        issue_number: github.context.payload.pull_request.number,
+        body,
+      })
+      // log info created new comment htmlURL
+      core.info(`created new comment ${data.html_url}`)
+    }
   }
 
-  lines.push('```diff')
-  lines.push(e.content)
-  lines.push('```')
-  return lines.join('\n')
-}
+  const summary = (e: Diff) => {
+    if (e.headRelativePath !== undefined && e.baseRelativePath !== undefined) {
+      return `- ${e.headRelativePath}`
+    }
+    if (e.headRelativePath !== undefined) {
+      return `- ${e.headRelativePath} **(New)**`
+    }
+    if (e.baseRelativePath !== undefined) {
+      return `- ${e.baseRelativePath} **(Deleted)**`
+    }
+  }
+
+  const template = (e: Diff) => {
+    const lines: string[] = []
+
+    if (e.headRelativePath) {
+      lines.push(`### ${e.headRelativePath}`)
+    } else if (e.baseRelativePath) {
+      lines.push(`### ${e.baseRelativePath}`)
+    }
+
+    lines.push('```diff')
+    lines.push(e.content)
+    lines.push('```')
+    return lines.join('\n')
+  }
