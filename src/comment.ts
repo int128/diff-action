@@ -48,7 +48,7 @@ ${details}
 ${key}`
 
   // Find the previous comment with the same key
-  const previousComment = await octokit.rest.issues.getComments({
+  const previousComment: Comment = await octokit.rest.issues.getComments({
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
     issue_number: github.context.payload.pull_request.number,
