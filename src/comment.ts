@@ -10,6 +10,47 @@ type Octokit = InstanceType<typeof GitHub>
     footer: string
   }
 
+
+import * as core from '@actions/core'
+import * as github from '@actions/github'
+import { Diff } from './diff'
+import { GitHub } from '@actions/github/lib/utils'
+
+type Octokit = InstanceType<typeof GitHub>
+
+type CommentOptions = {
+  header: string
+  footer: string
+}
+
+const summary = (e: Diff) => {
+  if (e.headRelativePath !== undefined && e.baseRelativePath !== undefined) {
+    return `- ${e.headRelativePath}`
+  }
+  if (e.headRelativePath !== undefined) {
+    return `- ${e.headRelativePath} **(New)**`
+  }
+  if (e.baseRelativePath !== undefined) {
+    return `- ${e.baseRelativePath} **(Deleted)**`
+  }
+}
+
+const template = (e: Diff) => {
+  const lines: string[] = []
+
+  if (e.headRelativePath) {
+    lines.push(`### ${e.headRelativePath}`)
+  } else if (e.baseRelativePath) {
+    lines.push(`### ${e.baseRelativePath}`)
+  }
+
+  lines.push('```diff')
+  lines.push(e.content)
+  lines.push('```')
+  return lines.join('\n')
+}
+
+
 export const comment = async (octokit: Octokit, diffs: Diff[], o: CommentOptions): Promise<void> => {
   if (github.context.payload.pull_request === undefined) {
     core.info(`ignore non pull-request event: ${github.context.eventName}`)
@@ -83,32 +124,5 @@ ${diffs.map(template).join('\n')}
       // log info created new comment htmlURL
       core.info(`created new comment ${data.html_url}`)
     }
-  }
-
-  const summary = (e: Diff) => {
-    if (e.headRelativePath !== undefined && e.baseRelativePath !== undefined) {
-      return `- ${e.headRelativePath}`
-    }
-    if (e.headRelativePath !== undefined) {
-      return `- ${e.headRelativePath} **(New)**`
-    }
-    if (e.baseRelativePath !== undefined) {
-      return `- ${e.baseRelativePath} **(Deleted)**`
-    }
-  }
-
-  const template = (e: Diff) => {
-    const lines: string[] = []
-
-    if (e.headRelativePath) {
-      lines.push(`### ${e.headRelativePath}`)
-    } else if (e.baseRelativePath) {
-      lines.push(`### ${e.baseRelativePath}`)
-    }
-
-    lines.push('```diff')
-    lines.push(e.content)
-    lines.push('```')
-    return lines.join('\n')
   }
 }
