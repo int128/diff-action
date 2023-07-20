@@ -5,23 +5,12 @@ import { GitHub } from '@actions/github/lib/utils'
 
 type Octokit = InstanceType<typeof GitHub>
 
-  type CommentOptions = {
-    header: string
-    footer: string
-  }
-
-
-import * as core from '@actions/core'
-import * as github from '@actions/github'
-import { Diff } from './diff'
-import { GitHub } from '@actions/github/lib/utils'
-
-type Octokit = InstanceType<typeof GitHub>
-
 type CommentOptions = {
   header: string
   footer: string
 }
+
+type IssueComment = components['schemas']['issue-comment'];
 
 const summary = (e: Diff) => {
   if (e.headRelativePath !== undefined && e.baseRelativePath !== undefined) {
@@ -51,7 +40,11 @@ const template = (e: Diff) => {
 }
 
 
-export const comment = async (octokit: Octokit, diffs: Diff[], o: CommentOptions): Promise<void> => {
+export const comment = async (
+  octokit: Octokit,
+  diffs: Diff[],
+  o: CommentOptions
+): Promise<void> => {
   if (github.context.payload.pull_request === undefined) {
     core.info(`ignore non pull-request event: ${github.context.eventName}`)
     return
@@ -97,7 +90,7 @@ ${diffs.map(template).join('\n')}
   })
 
   if (response && response.data) {
-    const previousComment = response.data;
+    const previousComment: IssueComment[] = response.data;
 
     // If the previous comment exists, update it
     if (previousComment.length > 0) {
