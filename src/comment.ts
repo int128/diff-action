@@ -111,3 +111,4 @@ ${diffs.map(template).join('\n')}
     lines.push('```')
     return lines.join('\n')
   }
+}
