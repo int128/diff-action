@@ -1,5 +1,5 @@
 import { comment } from '../src/comment'
-import { diff } from '../src/diff'
+import { Diff } from '../src/diff'
 import { GitHub } from '@actions/github/lib/utils'
 
 type Octokit = InstanceType<typeof GitHub>
@@ -9,42 +9,44 @@ type CommentOptions = {
   footer: string
 }
 
-const comment = async (octokit: Octokit, diffs: diff[], o: CommentOptions): Promise<void> => {
-  // ...
-}
+describe("comment function", () => {
+  it('should create a comment', async () => {
+    // Create a mock Octokit client.
+    const octokit = new GitHub({
+      token: 'my-token',
+    })
 
-const test = async () => {
-  // Create a mock Octokit client.
-  const octokit = new GitHub({
-    token: 'my-token',
-  })
+    // Create a mock diff object.
+    const mockDiff = new Diff({
+      headRelativePath: 'new-file.txt',
+      baseRelativePath: undefined,
+      content: '`diff\n+ This is a new file.\n`',
+    })
 
-  // Create a mock diff object.
-  const diff = new diff({
-    headRelativePath: 'new-file.txt',
-    baseRelativePath: undefined,
-    content: '`diff\n+ This is a new file.\n`',
-  })
+    // Create a CommentOptions object.
+    const o = {
+      header: 'This is a comment header',
+      footer: 'This is a comment footer',
+    }
 
-  // Create a CommentOptions object.
-  const o = {
-    header: 'This is a comment header',
-    footer: 'This is a comment footer',
-  }
+    // Call the `comment` function.
+    await comment(octokit, [mockDiff], o)
 
-  // Call the `comment` function.
-  await comment(octokit, [diff], o)
+    // Check that the comment was created.
+    let comments;
+    try {
+      comments = await octokit.rest.issues.getComments({
+        owner: 'octocat',
+        repo: 'octocat/hello-world',
+        issue_number: 1,
+      })
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
 
-  // Check that the comment was created.
-  const comments = await octokit.rest.issues.getComments({
-    owner: 'octocat',
-    repo: 'octocat/hello-world',
-    issue_number: 1,
-  })
-
-  expect(comments).toHaveLength(1)
-  expect(comments[0].body).toMatch(/This is a comment header/)
-  expect(comments[0].body).toMatch(/This is a new file./)
-}
-
-test()
+    expect(comments.data).toHaveLength(1)
+    expect(comments.data[0].body).toMatch(/This is a comment header/)
+    expect(comments.data[0].body).toMatch(/This is a new file./)
+  });
+});
