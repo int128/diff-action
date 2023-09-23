@@ -3,7 +3,7 @@ import { RequestError } from '@octokit/request-error'
 import { GitHubContext } from './github'
 
 export const addLabels = async (github: GitHubContext, labels: string[]): Promise<void> => {
-  if (github.eventName === 'pull_request') {
+  if (github.eventName !== 'pull_request') {
     core.info(`ignore non pull-request event: ${github.eventName}`)
     return
   }
@@ -22,7 +22,7 @@ export const addLabels = async (github: GitHubContext, labels: string[]): Promis
 }
 
 export const removeLabels = async (github: GitHubContext, labels: string[]): Promise<void> => {
-  if (github.eventName === 'pull_request') {
+  if (github.eventName !== 'pull_request') {
     core.info(`ignore non pull-request event: ${github.eventName}`)
     return
   }

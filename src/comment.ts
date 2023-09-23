@@ -8,7 +8,7 @@ type CommentOptions = {
 }
 
 export const comment = async (github: GitHubContext, diffs: Diff[], o: CommentOptions): Promise<void> => {
-  if (github.eventName === 'pull_request') {
+  if (github.eventName !== 'pull_request') {
     core.info(`ignore non pull-request event: ${github.eventName}`)
     return
   }
