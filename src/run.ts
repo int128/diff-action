@@ -1,6 +1,6 @@
 import * as core from '@actions/core'
 import * as diff from './diff'
-import * as github from '@actions/github'
+import * as github from './github'
 import { addLabels, removeLabels } from './label'
 import { comment } from './comment'
 
