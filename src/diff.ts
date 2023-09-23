@@ -1,9 +1,10 @@
 import * as core from '@actions/core'
 import * as exec from '@actions/exec'
 
-export const showColorDiff = async (base: string, head: string) => {
-  await exec.exec('git', ['diff', '--no-exit-code', '--no-index', '--color', base, head])
-}
+export const showColorDiff = async (base: string, head: string) =>
+  await exec.exec('git', ['diff', '--no-index', '--color', base, head], {
+    ignoreReturnCode: true,
+  })
 
 export type Diff = {
   baseRelativePath?: string
