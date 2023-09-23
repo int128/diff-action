@@ -1,14 +1,14 @@
 import * as core from '@actions/core'
 import { run } from './run'
+import { getGitHubContext } from './github'
 
 const main = async (): Promise<void> => {
-  const outputs = await run({
+  const outputs = await run(getGitHubContext(core.getInput('token', { required: true })), {
     base: core.getInput('base', { required: true }),
     head: core.getInput('head', { required: true }),
     label: core.getMultilineInput('label', { required: false }),
     commentHeader: core.getInput('comment-header'),
     commentFooter: core.getInput('comment-footer'),
-    token: core.getInput('token', { required: true }),
   })
   core.setOutput('different', outputs.different)
 }

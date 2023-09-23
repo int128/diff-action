@@ -1,18 +1,15 @@
 import * as core from '@actions/core'
-import * as github from '@actions/github'
 import { Diff } from './diff'
-import { GitHub } from '@actions/github/lib/utils'
-
-type Octokit = InstanceType<typeof GitHub>
+import { GitHubContext } from './github'
 
 type CommentOptions = {
   header: string
   footer: string
 }
 
-export const comment = async (octokit: Octokit, diffs: Diff[], o: CommentOptions): Promise<void> => {
-  if (github.context.payload.pull_request === undefined) {
-    core.info(`ignore non pull-request event: ${github.context.eventName}`)
+export const comment = async (github: GitHubContext, diffs: Diff[], o: CommentOptions): Promise<void> => {
+  if (github.eventName === 'pull_request') {
+    core.info(`ignore non pull-request event: ${github.eventName}`)
     return
   }
 
@@ -27,8 +24,7 @@ ${diffs.map(template).join('\n')}
   // https://github.community/t/maximum-length-for-the-comment-body-in-issues-and-pr/148867
   if (details.length > 60000) {
     core.info(`omit too long details (${details.length} chars)`)
-    const runURL = `${github.context.serverUrl}/${github.context.repo.owner}/${github.context.repo.repo}/actions/runs/${github.context.runId}`
-    details = `See the full diff from ${runURL}`
+    details = `See the full diff from ${github.workflowRunURL}`
   }
 
   const body = `\
@@ -43,10 +39,10 @@ ${details}
 
 ${o.footer}`
 
-  const { data } = await octokit.rest.issues.createComment({
-    owner: github.context.repo.owner,
-    repo: github.context.repo.repo,
-    issue_number: github.context.payload.pull_request.number,
+  const { data } = await github.octokit.rest.issues.createComment({
+    owner: github.owner,
+    repo: github.repo,
+    issue_number: github.issueNumber,
     body,
   })
   core.info(`created a comment as ${data.html_url}`)
