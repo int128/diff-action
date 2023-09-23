@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
 import * as diff from './diff'
 import { addLabels, removeLabels } from './label'
-import { comment } from './comment'
+import { addComment, formatComment } from './comment'
 import { GitHubContext } from './github'
 
 type Inputs = {
@@ -27,7 +27,12 @@ export const run = async (github: GitHubContext, inputs: Inputs): Promise<Output
     return { different: false }
   }
 
-  await comment(github, diffs, { header: inputs.commentHeader, footer: inputs.commentFooter })
+  const comment = formatComment(diffs, {
+    header: inputs.commentHeader,
+    footer: inputs.commentFooter,
+    workflowRunURL: github.workflowRunURL,
+  })
+  await addComment(github, comment)
   await addLabels(github, inputs.label)
   return { different: true }
 }
