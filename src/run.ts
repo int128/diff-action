@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import * as diff from './diff'
+import { computeDiff, showColorDiff } from './diff'
 import { addLabels, removeLabels } from './label'
 import { addComment, formatComment } from './comment'
 import { GitHubContext } from './github'
@@ -18,8 +18,10 @@ type Outputs = {
 
 export const run = async (github: GitHubContext, inputs: Inputs): Promise<Outputs> => {
   core.startGroup('diff')
-  const diffs = await diff.diff(inputs.base, inputs.head)
+  await showColorDiff(inputs.base, inputs.head)
   core.endGroup()
+
+  const diffs = await computeDiff(inputs.base, inputs.head)
 
   if (diffs.length === 0) {
     core.info('no diff')

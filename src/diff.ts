@@ -1,32 +1,33 @@
 import * as core from '@actions/core'
 import * as exec from '@actions/exec'
 
+export const showColorDiff = async (base: string, head: string) => {
+  await exec.exec('git', ['diff', '--no-exit-code', '--no-index', '--color', base, head])
+}
+
 export type Diff = {
   baseRelativePath?: string
   headRelativePath?: string
   content: string
 }
 
-export const diff = async (base: string, head: string): Promise<Diff[]> => {
-  const lines: string[] = []
-  const code = await exec.exec('git', ['diff', '--no-index', '--no-color', base, head], {
+export const computeDiff = async (base: string, head: string): Promise<Diff[]> => {
+  const { exitCode, stdout } = await exec.getExecOutput('git', ['diff', '--no-index', '--no-color', base, head], {
     ignoreReturnCode: true,
-    listeners: {
-      stdline: (line) => lines.push(line),
-    },
+    silent: true,
   })
-  core.info(`git-diff returned exit code ${code}`)
-  if (code === 0) {
+  core.info(`git-diff returned exit code ${exitCode}`)
+  if (exitCode === 0) {
     return []
   }
-  if (code > 1) {
-    throw new Error(`git-diff failed with exit code ${code}`)
+  if (exitCode === 1) {
+    return parseDiffOutput(stdout, base, head)
   }
-  return parseDiffLines(lines, base, head)
+  throw new Error(`git-diff failed with exit code ${exitCode}`)
 }
 
-export const parseDiffLines = (lines: string[], base: string, head: string): Diff[] => {
-  const chunks = splitDiffLinesToChunks(lines)
+const parseDiffOutput = (stdout: string, base: string, head: string): Diff[] => {
+  const chunks = splitDiffLinesToChunks(stdout.split(/\n/))
   return chunks.map((chunk) => parseChunk(chunk, base, head))
 }
 
