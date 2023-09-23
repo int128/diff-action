@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`formatComment 1`] = `
+"## diff
+
+- same.yaml
+- after.yaml
+- new.yaml **(New)**
+- old.yaml **(Deleted)**
+
+<details>
+
+### same.yaml
+\`\`\`diff
+change
+\`\`\`
+### after.yaml
+\`\`\`diff
+rename
+\`\`\`
+### new.yaml
+\`\`\`diff
+create
+\`\`\`
+### old.yaml
+\`\`\`diff
+delete
+\`\`\`
+
+</details>
+
+<!-- diff-action -->"
+`;
