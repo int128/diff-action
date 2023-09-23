@@ -28,13 +28,14 @@ export const computeDiff = async (base: string, head: string): Promise<Diff[]> =
 }
 
 const parseDiffOutput = (stdout: string, base: string, head: string): Diff[] => {
-  const chunks = splitDiffLinesToChunks(stdout.split(/\n/))
+  const chunks = splitDiffLinesToChunks(stdout)
   return chunks.map((chunk) => parseChunk(chunk, base, head))
 }
 
 type Chunk = string[]
 
-const splitDiffLinesToChunks = (lines: string[]): Chunk[] => {
+const splitDiffLinesToChunks = (stdout: string): Chunk[] => {
+  const lines = stdout.split(/\r?\n/)
   let current: Chunk = []
   const chunks: Chunk[] = [current]
   for (const line of lines) {
