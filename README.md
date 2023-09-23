@@ -2,16 +2,15 @@
 
 This is an action to compute a diff between head and base, and post it to a comment.
 
-
 ## Getting Started
 
 To compute the diff between `old-directory` and `new-directory`:
 
 ```yaml
-      - uses: int128/diff-action@v1
-        with:
-          base: old-directory
-          head: new-directory
+- uses: int128/diff-action@v1
+  with:
+    base: old-directory
+    head: new-directory
 ```
 
 ### Show diff of generated manifests
@@ -56,13 +55,12 @@ Here is an example.
 To add label(s) if there is difference or remove it if not:
 
 ```yaml
-      - uses: int128/diff-action@v1
-        with:
-          base: ${{ steps.kustomize-base.outputs.directory }}
-          head: ${{ steps.kustomize-head.outputs.directory }}
-          label: manifest-changed
+- uses: int128/diff-action@v1
+  with:
+    base: ${{ steps.kustomize-base.outputs.directory }}
+    head: ${{ steps.kustomize-head.outputs.directory }}
+    label: manifest-changed
 ```
-
 
 ## Specification
 
@@ -70,18 +68,22 @@ This action posts a comment on pull request event only.
 
 ### Inputs
 
-| Name | Required | Description
-|------|----------|-------------
-| `base` | (required) | base path (multiline)
-| `head` | (required) | head path (multiline)
-| `label` | - | label(s) to add/remove to indicate diff (multiline)
-| `comment-header` | - | header of a comment to post
-| `comment-footer` | - | footer of a comment to post
-| `token` | `github.token` | GitHub token to post a comment
+| Name              | Required       | Description                                         |
+| ----------------- | -------------- | --------------------------------------------------- |
+| `base`            | (required)     | base path (multiline)                               |
+| `head`            | (required)     | head path (multiline)                               |
+| `diff-extra-args` | (\*1)          | extra args to `git-diff` (multiline)                |
+| `label`           | -              | label(s) to add/remove to indicate diff (multiline) |
+| `comment-header`  | -              | header of a comment to post                         |
+| `comment-footer`  | -              | footer of a comment to post                         |
+| `token`           | `github.token` | GitHub token to post a comment                      |
 
+(\*1)
+By default, `--irreversible-delete` is passed to generate a short diff.
+You can overwrite it.
 
 ### Outputs
 
-| Name | Description
-|------|------------
-| `different` | `true` if there is any difference, or `false`
+| Name        | Description                                   |
+| ----------- | --------------------------------------------- |
+| `different` | `true` if there is any difference, or `false` |

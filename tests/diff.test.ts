@@ -1,7 +1,11 @@
 import { computeDiff } from '../src/diff'
 
 test('diff', async () => {
-  const diffs = await computeDiff(`${__dirname}/fixtures/base`, `${__dirname}/fixtures/head`)
+  const diffs = await computeDiff({
+    base: `${__dirname}/fixtures/base`,
+    head: `${__dirname}/fixtures/head`,
+    diffExtraArgs: [],
+  })
   expect(diffs.length).toBe(4)
   expect(diffs[0].baseRelativePath).toBeUndefined()
   expect(diffs[0].headRelativePath).toBe('bar.txt')

@@ -1,8 +1,14 @@
 import * as core from '@actions/core'
 import * as exec from '@actions/exec'
 
-export const showColorDiff = async (base: string, head: string) =>
-  await exec.exec('git', ['diff', '--no-index', '--color', base, head], {
+type DiffOptions = {
+  base: string
+  head: string
+  diffExtraArgs: string[]
+}
+
+export const showColorDiff = async (opts: DiffOptions) =>
+  await exec.exec('git', ['diff', '--no-index', '--color', ...opts.diffExtraArgs, '--', opts.base, opts.head], {
     ignoreReturnCode: true,
   })
 
@@ -12,17 +18,21 @@ export type Diff = {
   content: string
 }
 
-export const computeDiff = async (base: string, head: string): Promise<Diff[]> => {
-  const { exitCode, stdout } = await exec.getExecOutput('git', ['diff', '--no-index', '--no-color', base, head], {
-    ignoreReturnCode: true,
-    silent: true,
-  })
+export const computeDiff = async (opts: DiffOptions): Promise<Diff[]> => {
+  const { exitCode, stdout } = await exec.getExecOutput(
+    'git',
+    ['diff', '--no-index', '--no-color', ...opts.diffExtraArgs, '--', opts.base, opts.head],
+    {
+      ignoreReturnCode: true,
+      silent: true,
+    },
+  )
   core.info(`git-diff returned exit code ${exitCode}`)
   if (exitCode === 0) {
     return []
   }
   if (exitCode === 1) {
-    return parseDiffOutput(stdout, base, head)
+    return parseDiffOutput(stdout, opts.base, opts.head)
   }
   throw new Error(`git-diff failed with exit code ${exitCode}`)
 }

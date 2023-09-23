@@ -7,6 +7,11 @@ inputs:
   head:
     description: example input
     required: true
+  diff-extra-args:
+    description: extra args to git-diff
+    required: false
+    default: |
+      --irreversible-delete
   label:
     description: label(s) to add/remove to indicate diff
     required: false

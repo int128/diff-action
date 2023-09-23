@@ -7,6 +7,7 @@ import { GitHubContext } from './github'
 type Inputs = {
   base: string
   head: string
+  diffExtraArgs: string[]
   label: string[]
   commentHeader: string
   commentFooter: string
@@ -18,10 +19,10 @@ type Outputs = {
 
 export const run = async (github: GitHubContext, inputs: Inputs): Promise<Outputs> => {
   core.startGroup('diff')
-  await showColorDiff(inputs.base, inputs.head)
+  await showColorDiff(inputs)
   core.endGroup()
 
-  const diffs = await computeDiff(inputs.base, inputs.head)
+  const diffs = await computeDiff(inputs)
 
   if (diffs.length === 0) {
     core.info('no diff')
