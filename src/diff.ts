@@ -25,7 +25,7 @@ export const diff = async (base: string, head: string): Promise<Diff[]> => {
   return parseDiffLines(lines, base, head)
 }
 
-const parseDiffLines = (lines: string[], base: string, head: string): Diff[] => {
+export const parseDiffLines = (lines: string[], base: string, head: string): Diff[] => {
   const chunks = splitDiffLinesToChunks(lines)
   return chunks.map((chunk) => parseChunk(chunk, base, head))
 }
