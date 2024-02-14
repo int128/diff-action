@@ -12,5 +12,5 @@ export const addComment = async (github: GitHubContext, body: string): Promise<v
     issue_number: github.issueNumber,
     body,
   })
-  core.info(`created a comment as ${data.html_url}`)
+  core.info(`Created a comment as ${data.html_url}`)
 }

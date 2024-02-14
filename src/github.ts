@@ -1,13 +1,9 @@
-import { getOctokitOptions, GitHub } from '@actions/github/lib/utils'
 import * as github from '@actions/github'
 import * as pluginRetry from '@octokit/plugin-retry'
 
-type Octokit = InstanceType<typeof GitHub>
+type Octokit = ReturnType<typeof github.getOctokit>
 
-const getOctokit = (token: string): Octokit => {
-  const MyOctokit = GitHub.plugin(pluginRetry.retry)
-  return new MyOctokit(getOctokitOptions(token))
-}
+const getOctokit = (token: string): Octokit => github.getOctokit(token, undefined, pluginRetry.retry)
 
 export type GitHubContext = {
   octokit: Octokit

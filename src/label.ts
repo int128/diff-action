@@ -11,14 +11,14 @@ export const addLabels = async (github: GitHubContext, labels: string[]): Promis
     return
   }
 
-  core.info(`adding labels ${labels.join(', ')} to pull request`)
+  core.info(`Adding the labels to #${github.issueNumber}: ${labels.join(', ')}`)
   const { data: added } = await github.octokit.rest.issues.addLabels({
     owner: github.owner,
     repo: github.repo,
     issue_number: github.issueNumber,
     labels,
   })
-  core.info(`added labels ${added.map((l) => l.name).join(', ')}`)
+  core.info(`Added the labels: ${added.map((l) => l.name).join(', ')}`)
 }
 
 export const removeLabels = async (github: GitHubContext, labels: string[]): Promise<void> => {
@@ -31,7 +31,7 @@ export const removeLabels = async (github: GitHubContext, labels: string[]): Pro
   }
 
   for (const label of labels) {
-    core.info(`removing label "${label}" from pull request`)
+    core.info(`Removing the label from #${github.issueNumber}: ${label}`)
     try {
       await github.octokit.rest.issues.removeLabel({
         owner: github.owner,
@@ -39,10 +39,10 @@ export const removeLabels = async (github: GitHubContext, labels: string[]): Pro
         issue_number: github.issueNumber,
         name: label,
       })
-      core.info(`removed label ${label}`)
+      core.info(`Removed the label: ${label}`)
     } catch (error) {
       if (error instanceof RequestError && error.status === 404) {
-        core.info(`skip removing label ${label}`)
+        core.info(`Skip removing the label: ${error}`)
         continue
       }
       throw error
