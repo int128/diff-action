@@ -7,7 +7,7 @@ type Comment = {
   updateIfExistsKey: string
 }
 
-export type UpdateIfExistsType = 'replace' | 'recreate' | undefined
+export type UpdateIfExistsType = 'replace' | 'append' | 'recreate' | undefined
 
 export const addComment = async (github: GitHubContext, comment: Comment): Promise<void> => {
   if (!github.issueNumber) {
@@ -41,6 +41,7 @@ export const addComment = async (github: GitHubContext, comment: Comment): Promi
     core.info(`Created a comment ${created.html_url}`)
     return
   }
+  core.info(`Key found at the comment ${existingComment.html_url}`)
 
   if (comment.updateIfExists === 'recreate') {
     await github.octokit.rest.issues.deleteComment({
@@ -60,12 +61,15 @@ export const addComment = async (github: GitHubContext, comment: Comment): Promi
     return
   }
 
-  core.info(`Key found at the comment ${existingComment.html_url}`)
+  let body = `${comment.body}\n${commentKey}`
+  if (comment.updateIfExists === 'append') {
+    body = `${existingComment.body}\n${body}`
+  }
   const { data: updated } = await github.octokit.rest.issues.updateComment({
     owner: github.owner,
     repo: github.repo,
     comment_id: existingComment.id,
-    body: `${comment.body}\n${commentKey}`,
+    body,
   })
   core.info(`Updated the comment ${updated.html_url}`)
 }

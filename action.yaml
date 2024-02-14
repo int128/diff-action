@@ -21,7 +21,7 @@ inputs:
     default: |
       <!-- diff-action -->
   update-if-exists:
-    description: If set, create or update a comment. This must be either replace or recreate
+    description: If set, create or update a comment. This must be either replace, append or recreate
     required: false
   update-if-exists-key:
     description: Key for update-if-exists, appended into a comment

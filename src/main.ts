@@ -20,7 +20,7 @@ const updateIfExistsValue = (s: string): UpdateIfExistsType => {
   if (!s) {
     return undefined
   }
-  if (s !== 'replace' && s !== 'recreate') {
+  if (s !== 'replace' && s !== 'append' && s !== 'recreate') {
     throw new Error(`update-if-exists must be replace or recreate: ${s}`)
   }
   return s

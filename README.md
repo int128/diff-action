@@ -77,6 +77,16 @@ To replace the comment if it exists,
     update-if-exists: replace
 ```
 
+To append the comment if it exists,
+
+```yaml
+- uses: int128/diff-action@v1
+  with:
+    base: ${{ steps.kustomize-base.outputs.directory }}
+    head: ${{ steps.kustomize-head.outputs.directory }}
+    update-if-exists: append
+```
+
 To recreate the comment if it exists,
 
 ```yaml
@@ -96,16 +106,16 @@ This action posts a comment on `pull_request` or `pull_request_target` event onl
 
 ### Inputs
 
-| Name                   | Required                                   | Description                                                                     |
-| ---------------------- | ------------------------------------------ | ------------------------------------------------------------------------------- |
-| `base`                 | (required)                                 | Path(s) of base (multiline)                                                     |
-| `head`                 | (required)                                 | Path(s) of head (multiline)                                                     |
-| `label`                | -                                          | Label(s) to add or remove to indicate the diff (multiline)                      |
-| `comment-header`       | -                                          | Header of a comment to post                                                     |
-| `comment-footer`       | -                                          | Footer of a comment to post                                                     |
-| `update-if-exists`     | (optional)                                 | If set, create or update a comment. This must be either `replace` or `recreate` |
-| `update-if-exists-key` | `${{ github.workflow }}/${{ github.job }}` | Key for `update-if-exists`                                                      |
-| `token`                | `github.token`                             | GitHub token to post a comment                                                  |
+| Name                   | Required                                   | Description                                                                               |
+| ---------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------- |
+| `base`                 | (required)                                 | Path(s) of base (multiline)                                                               |
+| `head`                 | (required)                                 | Path(s) of head (multiline)                                                               |
+| `label`                | -                                          | Label(s) to add or remove to indicate the diff (multiline)                                |
+| `comment-header`       | -                                          | Header of a comment to post                                                               |
+| `comment-footer`       | -                                          | Footer of a comment to post                                                               |
+| `update-if-exists`     | (optional)                                 | If set, create or update a comment. This must be either `replace`, `append` or `recreate` |
+| `update-if-exists-key` | `${{ github.workflow }}/${{ github.job }}` | Key for `update-if-exists`                                                                |
+| `token`                | `github.token`                             | GitHub token to post a comment                                                            |
 
 ### Outputs
 
