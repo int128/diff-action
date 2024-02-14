@@ -2,7 +2,7 @@ import * as core from '@actions/core'
 import { GitHubContext } from './github'
 import { computeDiff, showColorDiff } from './diff'
 import { addLabels, removeLabels } from './label'
-import { addComment } from './comment'
+import { UpdateIfExistsType, addComment } from './comment'
 import { formatComment } from './format'
 
 type Inputs = {
@@ -11,6 +11,8 @@ type Inputs = {
   label: string[]
   commentHeader: string
   commentFooter: string
+  updateIfExists: UpdateIfExistsType
+  updateIfExistsKey: string
 }
 
 type Outputs = {
@@ -30,12 +32,16 @@ export const run = async (github: GitHubContext, inputs: Inputs): Promise<Output
     return { different: false }
   }
 
-  const comment = formatComment(diffs, {
+  const body = formatComment(diffs, {
     header: inputs.commentHeader,
     footer: inputs.commentFooter,
     workflowRunURL: github.workflowRunURL,
   })
-  await addComment(github, comment)
+  await addComment(github, {
+    body,
+    updateIfExists: inputs.updateIfExists,
+    updateIfExistsKey: inputs.updateIfExistsKey,
+  })
   await addLabels(github, inputs.label)
   return { different: true }
 }
