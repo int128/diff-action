@@ -19,7 +19,7 @@ inputs:
     description: Footer of a comment to post
     required: false
     default: |
-      <!-- diff-action -->
+      [GitHub Actions](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
   update-if-exists:
     description: If set, create or update a comment. This must be either replace, append or recreate
     required: false
