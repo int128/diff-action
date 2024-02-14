@@ -25,7 +25,7 @@ export const run = async (github: GitHubContext, inputs: Inputs): Promise<Output
   const diffs = await computeDiff(inputs.base, inputs.head)
 
   if (diffs.length === 0) {
-    core.info('no diff')
+    core.info('No diff')
     await removeLabels(github, inputs.label)
     return { different: false }
   }
