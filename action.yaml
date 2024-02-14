@@ -1,22 +1,22 @@
 name: diff
-description: show diff and post a comment
+description: Compute a diff between head and base, and post it to a comment.
 inputs:
   base:
-    description: example input
+    description: Path(s) of base (multiline)
     required: true
   head:
-    description: example input
+    description: Path(s) of head (multiline)
     required: true
   label:
-    description: label(s) to add/remove to indicate diff
+    description: Label(s) to add or remove to indicate the diff (multiline)
     required: false
   comment-header:
-    description: header of a comment to post
+    description: Header of a comment to post
     required: false
     default: |
       ## diff
   comment-footer:
-    description: footer of a comment to post
+    description: Footer of a comment to post
     required: false
     default: |
       <!-- diff-action -->
@@ -26,7 +26,7 @@ inputs:
     default: ${{ github.token }}
 outputs:
   different:
-    description: true if there is any diff, or false
+    description: If there is any difference, `true`. Otherwise, `false`
 runs:
   using: 'node20'
   main: 'dist/index.js'
