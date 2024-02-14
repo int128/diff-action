@@ -1,8 +1,9 @@
 import * as core from '@actions/core'
+import { GitHubContext } from './github'
 import { computeDiff, showColorDiff } from './diff'
 import { addLabels, removeLabels } from './label'
-import { addComment, formatComment } from './comment'
-import { GitHubContext } from './github'
+import { addComment } from './comment'
+import { formatComment } from './format'
 
 type Inputs = {
   base: string
