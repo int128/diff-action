@@ -42,7 +42,7 @@ export const removeLabels = async (github: GitHubContext, labels: string[]): Pro
       core.info(`Removed the label: ${label}`)
     } catch (error) {
       if (error instanceof RequestError && error.status === 404) {
-        core.info(`Skip removing the label: ${error}`)
+        core.info(`Skip removing the label: ${String(error)}`)
         continue
       }
       throw error
