@@ -66,7 +66,7 @@ To add label(s) if there is difference or remove it if not:
 
 ## Specification
 
-This action posts a comment on pull request event only.
+This action posts a comment on `pull_request` or `pull_request_target` event only.
 
 ### Inputs
 
