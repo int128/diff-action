@@ -2,16 +2,15 @@
 
 This is an action to compute a diff between head and base, and post it to a comment.
 
-
 ## Getting Started
 
 To compute the diff between `old-directory` and `new-directory`:
 
 ```yaml
-      - uses: int128/diff-action@v1
-        with:
-          base: old-directory
-          head: new-directory
+- uses: int128/diff-action@v1
+  with:
+    base: old-directory
+    head: new-directory
 ```
 
 ### Show diff of generated manifests
@@ -56,13 +55,12 @@ Here is an example.
 To add label(s) if there is difference or remove it if not:
 
 ```yaml
-      - uses: int128/diff-action@v1
-        with:
-          base: ${{ steps.kustomize-base.outputs.directory }}
-          head: ${{ steps.kustomize-head.outputs.directory }}
-          label: manifest-changed
+- uses: int128/diff-action@v1
+  with:
+    base: ${{ steps.kustomize-base.outputs.directory }}
+    head: ${{ steps.kustomize-head.outputs.directory }}
+    label: manifest-changed
 ```
-
 
 ## Specification
 
@@ -70,18 +68,17 @@ This action posts a comment on `pull_request` or `pull_request_target` event onl
 
 ### Inputs
 
-| Name | Required | Description
-|------|----------|-------------
-| `base` | (required) | base path (multiline)
-| `head` | (required) | head path (multiline)
-| `label` | - | label(s) to add/remove to indicate diff (multiline)
-| `comment-header` | - | header of a comment to post
-| `comment-footer` | - | footer of a comment to post
-| `token` | `github.token` | GitHub token to post a comment
-
+| Name             | Required       | Description                                                |
+| ---------------- | -------------- | ---------------------------------------------------------- |
+| `base`           | (required)     | Path(s) of base (multiline)                                |
+| `head`           | (required)     | Path(s) of head (multiline)                                |
+| `label`          | -              | Label(s) to add or remove to indicate the diff (multiline) |
+| `comment-header` | -              | Header of a comment to post                                |
+| `comment-footer` | -              | Footer of a comment to post                                |
+| `token`          | `github.token` | GitHub token to post a comment                             |
 
 ### Outputs
 
-| Name | Description
-|------|------------
-| `different` | `true` if there is any difference, or `false`
+| Name        | Description                                            |
+| ----------- | ------------------------------------------------------ |
+| `different` | If there is any difference, `true`. Otherwise, `false` |
