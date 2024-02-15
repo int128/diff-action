@@ -1,6 +1,7 @@
 import * as core from '@actions/core'
 import { run } from './run'
 import { getGitHubContext } from './github'
+import { UpdateIfExistsType } from './comment'
 
 const main = async (): Promise<void> => {
   const outputs = await run(getGitHubContext(core.getInput('token', { required: true })), {
@@ -9,8 +10,20 @@ const main = async (): Promise<void> => {
     label: core.getMultilineInput('label', { required: false }),
     commentHeader: core.getInput('comment-header'),
     commentFooter: core.getInput('comment-footer'),
+    updateIfExists: updateIfExistsValue(core.getInput('update-if-exists')),
+    updateIfExistsKey: core.getInput('update-if-exists-key'),
   })
   core.setOutput('different', outputs.different)
+}
+
+const updateIfExistsValue = (s: string): UpdateIfExistsType => {
+  if (!s) {
+    return undefined
+  }
+  if (s !== 'replace' && s !== 'append' && s !== 'recreate') {
+    throw new Error(`update-if-exists must be replace or recreate: ${s}`)
+  }
+  return s
 }
 
 main().catch((e: Error) => {
