@@ -20,6 +20,7 @@ inputs:
     required: false
     default: |
       [See the workflow run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+      <!-- diff-action -->
   update-if-exists:
     description: If set, create or update a comment. This must be either replace, append or recreate
     required: false
