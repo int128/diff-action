@@ -1,5 +1,4 @@
 import * as core from '@actions/core'
-import { RequestError } from '@octokit/request-error'
 import { GitHubContext } from './github'
 
 export const addLabels = async (github: GitHubContext, labels: string[]): Promise<void> => {
@@ -41,7 +40,7 @@ export const removeLabels = async (github: GitHubContext, labels: string[]): Pro
       })
       core.info(`Removed the label: ${label}`)
     } catch (error) {
-      if (error instanceof RequestError && error.status === 404) {
+      if (isRequestError(error) && error.status === 404) {
         core.info(`Skip removing the label: ${String(error)}`)
         continue
       }
@@ -49,3 +48,8 @@ export const removeLabels = async (github: GitHubContext, labels: string[]): Pro
     }
   }
 }
+
+type RequestError = Error & { status: number }
+
+const isRequestError = (error: unknown): error is RequestError =>
+  error instanceof Error && 'status' in error && typeof error.status === 'number'
