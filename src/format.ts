@@ -97,7 +97,7 @@ const formatDetails = (diffs: Diff[], o: CommentOptions): string => {
 
 const formatShortDetails = (diffs: Diff[], o: CommentOptions): string => {
   const lines = diffs.flatMap((d) => {
-    if (d.headRelativePath && d.baseRelativePath === undefined) {
+    if (d.headRelativePath === undefined && d.baseRelativePath !== undefined) {
       return [`### ${d.headRelativePath} (deleted)`]
     }
     const lines = []
