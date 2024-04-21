@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import { GitHubContext } from './github'
+import { GitHubContext } from './github.js'
 
 type Comment = {
   body: string

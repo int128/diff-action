@@ -1,4 +1,4 @@
-import { computeDiff } from '../src/diff'
+import { computeDiff } from '../src/diff.js'
 
 test('diff', async () => {
   const diffs = await computeDiff(`${__dirname}/fixtures/base`, `${__dirname}/fixtures/head`)

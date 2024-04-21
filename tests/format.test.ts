@@ -1,4 +1,4 @@
-import { formatComment } from '../src/format'
+import { formatComment } from '../src/format.js'
 
 test('formatComment', () => {
   const comment = formatComment(
