@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import { Diff } from './diff'
+import { Diff } from './diff.js'
 
 type CommentOptions = {
   header: string
