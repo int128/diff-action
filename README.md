@@ -23,9 +23,12 @@ To build manifests with [int128/kustomize-action](https://github.com/int128/kust
 jobs:
   diff:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write # required to post a comment to a pull request
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           ref: main
           path: main
