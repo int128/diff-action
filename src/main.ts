@@ -13,6 +13,7 @@ const main = async (): Promise<void> => {
     updateIfExists: updateIfExistsValue(core.getInput('update-if-exists')),
     updateIfExistsKey: core.getInput('update-if-exists-key'),
   })
+  core.info(`Setting the outputs to ${JSON.stringify(outputs)}`)
   core.setOutput('different', outputs.different)
 }
 
