@@ -25,13 +25,6 @@ export const run = async (github: GitHubContext, inputs: Inputs): Promise<Output
   core.endGroup()
 
   const diffs = await computeDiff(inputs.base, inputs.head)
-
-  if (diffs.length === 0) {
-    core.info('No diff')
-    await removeLabels(github, inputs.label)
-    return { different: false }
-  }
-
   const body = formatComment(diffs, {
     header: inputs.commentHeader,
     footer: inputs.commentFooter,
@@ -42,6 +35,12 @@ export const run = async (github: GitHubContext, inputs: Inputs): Promise<Output
     updateIfExists: inputs.updateIfExists,
     updateIfExistsKey: inputs.updateIfExistsKey,
   })
-  await addLabels(github, inputs.label)
-  return { different: true }
+
+  if (diffs.length > 0) {
+    await addLabels(github, inputs.label)
+  } else {
+    await removeLabels(github, inputs.label)
+  }
+
+  return { different: diffs.length > 0 }
 }

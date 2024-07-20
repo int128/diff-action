@@ -8,6 +8,10 @@ type CommentOptions = {
 }
 
 export const formatComment = (diffs: Diff[], o: CommentOptions): string => {
+  if (diffs.length === 0) {
+    return generateNoDiffComment(o)
+  }
+
   // Comment body must be less than 64kB
   // https://github.community/t/maximum-length-for-the-comment-body-in-issues-and-pr/148867
   const fullComment = generateFullComment(diffs, o)
@@ -27,6 +31,13 @@ export const formatComment = (diffs: Diff[], o: CommentOptions): string => {
   core.info(`Fallback to last resort, because summary comment is too long (${summaryComment.length} chars)`)
   return `${o.header}\nSee the full diff from ${o.workflowRunURL}\n${o.footer}`
 }
+
+const generateNoDiffComment = (o: CommentOptions): string => `\
+${o.header}
+
+No diff
+
+${o.footer}`
 
 const generateFullComment = (diffs: Diff[], o: CommentOptions): string => `\
 ${o.header}
