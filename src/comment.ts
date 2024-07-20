@@ -7,7 +7,7 @@ type Comment = {
   updateIfExistsKey: string
 }
 
-export type UpdateIfExistsType = 'replace' | 'append' | 'recreate' | undefined
+export type UpdateIfExistsType = 'create' | 'replace' | 'append' | 'recreate'
 
 export const addComment = async (github: GitHubContext, comment: Comment): Promise<void> => {
   if (!github.issueNumber) {
@@ -15,7 +15,7 @@ export const addComment = async (github: GitHubContext, comment: Comment): Promi
     return
   }
 
-  if (comment.updateIfExists === undefined) {
+  if (comment.updateIfExists === 'create') {
     core.info(`Creating a comment to #${github.issueNumber}`)
     const { data: created } = await github.octokit.rest.issues.createComment({
       owner: github.owner,

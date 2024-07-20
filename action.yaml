@@ -22,8 +22,9 @@ inputs:
       [See the workflow run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
       <!-- diff-action -->
   update-if-exists:
-    description: If set, create or update a comment. This must be either replace, append or recreate
-    required: false
+    description: Either create, replace, append or recreate
+    required: true
+    default: replace
   update-if-exists-key:
     description: Key for update-if-exists, appended into a comment
     required: true

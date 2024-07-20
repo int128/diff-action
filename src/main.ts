@@ -13,14 +13,12 @@ const main = async (): Promise<void> => {
     updateIfExists: updateIfExistsValue(core.getInput('update-if-exists')),
     updateIfExistsKey: core.getInput('update-if-exists-key'),
   })
+  core.info(`Setting the outputs to ${JSON.stringify(outputs)}`)
   core.setOutput('different', outputs.different)
 }
 
 const updateIfExistsValue = (s: string): UpdateIfExistsType => {
-  if (!s) {
-    return undefined
-  }
-  if (s !== 'replace' && s !== 'append' && s !== 'recreate') {
+  if (s !== 'create' && s !== 'replace' && s !== 'append' && s !== 'recreate') {
     throw new Error(`update-if-exists must be replace or recreate: ${s}`)
   }
   return s
