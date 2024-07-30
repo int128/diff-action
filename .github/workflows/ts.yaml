@@ -48,6 +48,7 @@ jobs:
           base: tests/fixtures/head
           head: tests/fixtures/head
           label: changed
+          skip-no-diff: true
       - run: test ${{ steps.no-diff.outputs.different }} = false
 
   generate:

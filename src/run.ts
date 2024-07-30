@@ -13,6 +13,7 @@ type Inputs = {
   commentFooter: string
   updateIfExists: UpdateIfExistsType
   updateIfExistsKey: string
+  skipNoDiff: boolean
 }
 
 type Outputs = {
@@ -25,6 +26,13 @@ export const run = async (github: GitHubContext, inputs: Inputs): Promise<Output
   core.endGroup()
 
   const diffs = await computeDiff(inputs.base, inputs.head)
+
+  if (diffs.length === 0 && inputs.skipNoDiff) {
+    core.info('No diff')
+    await removeLabels(github, inputs.label)
+    return { different: false }
+  }
+
   const body = formatComment(diffs, {
     header: inputs.commentHeader,
     footer: inputs.commentFooter,
