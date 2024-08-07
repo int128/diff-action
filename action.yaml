@@ -29,6 +29,10 @@ inputs:
     description: Key for update-if-exists, appended into a comment
     required: true
     default: ${{ github.workflow }}/${{ github.job }}
+  skip-no-diff:
+    description: Do not add comments for empty diff
+    required: false
+    default: 'false'
   token:
     description: GitHub token to post a comment
     required: true

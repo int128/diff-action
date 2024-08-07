@@ -12,6 +12,7 @@ const main = async (): Promise<void> => {
     commentFooter: core.getInput('comment-footer'),
     updateIfExists: updateIfExistsValue(core.getInput('update-if-exists')),
     updateIfExistsKey: core.getInput('update-if-exists-key'),
+    skipNoDiff: core.getInput('skip-no-diff'),
   })
   core.info(`Setting the outputs to ${JSON.stringify(outputs)}`)
   core.setOutput('different', outputs.different)

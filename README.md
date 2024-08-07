@@ -96,6 +96,7 @@ This action posts a comment on `pull_request` or `pull_request_target` event onl
 | `comment-footer`       | -                                          | Footer of a comment to post                                |
 | `update-if-exists`     | (optional)                                 | Either `create`, `replace`, `append` or `recreate`         |
 | `update-if-exists-key` | `${{ github.workflow }}/${{ github.job }}` | Key for `update-if-exists`                                 |
+| `skip-no-diff`         | -                                          | Do not add comments for empty diff                         |
 | `token`                | `github.token`                             | GitHub token to post a comment                             |
 
 ### Outputs
