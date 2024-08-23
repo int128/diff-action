@@ -16,6 +16,10 @@ export const addComment = async (github: GitHubContext, comment: Comment): Promi
   }
 
   if (comment.updateIfExists === 'create') {
+    if (comment.body === '') {
+      core.info('Nothing to create')
+      return
+    }
     core.info(`Creating a comment to #${github.issueNumber}`)
     const { data: created } = await github.octokit.rest.issues.createComment({
       owner: github.owner,
@@ -32,6 +36,10 @@ export const addComment = async (github: GitHubContext, comment: Comment): Promi
   const existingComment = await findComment(github, commentKey)
   if (!existingComment) {
     core.info(`Key not found in #${github.issueNumber}`)
+    if (comment.body === '') {
+      core.info('Nothing to create')
+      return
+    }
     const { data: created } = await github.octokit.rest.issues.createComment({
       owner: github.owner,
       repo: github.repo,
@@ -50,7 +58,10 @@ export const addComment = async (github: GitHubContext, comment: Comment): Promi
       comment_id: existingComment.id,
     })
     core.info(`Deleted the comment ${existingComment.html_url}`)
-
+    if (comment.body === '') {
+      core.info('Nothing to create')
+      return
+    }
     const { data: created } = await github.octokit.rest.issues.createComment({
       owner: github.owner,
       repo: github.repo,
