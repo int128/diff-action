@@ -10,6 +10,10 @@ inputs:
   label:
     description: Label(s) to add or remove to indicate the diff (multiline)
     required: false
+  comment-body-no-diff:
+    description: Comment body when no difference
+    required: false
+    default: No diff
   comment-header:
     description: Header of a comment to post
     required: false

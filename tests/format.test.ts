@@ -25,6 +25,7 @@ test('formatComment', () => {
       },
     ],
     {
+      bodyNoDiff: 'No diff',
       header: '## diff',
       footer: '<!-- diff-action -->',
       workflowRunURL: 'https://github.com/int128/diff-action/actions/runs/6282216330',

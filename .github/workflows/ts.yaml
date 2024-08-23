@@ -50,6 +50,13 @@ jobs:
           label: changed
       - run: test ${{ steps.no-diff.outputs.different }} = false
 
+      - name: e2e-test (comment-body-no-diff)
+        uses: ./
+        with:
+          base: tests/fixtures/body
+          head: tests/fixtures/body
+          comment-body-no-diff: ''
+
   generate:
     runs-on: ubuntu-latest
     timeout-minutes: 10

@@ -8,6 +8,7 @@ const main = async (): Promise<void> => {
     base: core.getInput('base', { required: true }),
     head: core.getInput('head', { required: true }),
     label: core.getMultilineInput('label', { required: false }),
+    commentBodyNoDiff: core.getInput('comment-body-no-diff'),
     commentHeader: core.getInput('comment-header'),
     commentFooter: core.getInput('comment-footer'),
     updateIfExists: updateIfExistsValue(core.getInput('update-if-exists')),

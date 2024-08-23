@@ -13,7 +13,7 @@ To post a comment of the diff between `old-directory` and `new-directory`,
     head: new-directory
 ```
 
-If no difference, it post a comment of "No diff".
+If no difference, it post a comment of "No diff" by default.
 
 ### Show diff of generated manifests
 
@@ -67,6 +67,24 @@ To add label(s) if there is difference or remove it if not:
     label: manifest-changed
 ```
 
+### No diff comment
+
+To change the comment of when no difference,
+
+```yaml
+- uses: int128/diff-action@v1
+  with:
+    comment-body-no-diff: No diff of kustomize build
+```
+
+To suppress any comment when no difference,
+
+```yaml
+- uses: int128/diff-action@v1
+  with:
+    comment-body-no-diff: ''
+```
+
 ### Comment strategy
 
 This action supports the following strategies:
@@ -87,11 +105,12 @@ This action posts a comment on `pull_request` or `pull_request_target` event onl
 
 ### Inputs
 
-| Name                   | Required                                   | Description                                                |
+| Name                   | Default                                    | Description                                                |
 | ---------------------- | ------------------------------------------ | ---------------------------------------------------------- |
 | `base`                 | (required)                                 | Path(s) of base (multiline)                                |
 | `head`                 | (required)                                 | Path(s) of head (multiline)                                |
 | `label`                | -                                          | Label(s) to add or remove to indicate the diff (multiline) |
+| `comment-body-no-diff` | No diff                                    | Comment body when no difference                            |
 | `comment-header`       | -                                          | Header of a comment to post                                |
 | `comment-footer`       | -                                          | Footer of a comment to post                                |
 | `update-if-exists`     | (optional)                                 | Either `create`, `replace`, `append` or `recreate`         |

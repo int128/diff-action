@@ -9,6 +9,7 @@ type Inputs = {
   base: string
   head: string
   label: string[]
+  commentBodyNoDiff: string
   commentHeader: string
   commentFooter: string
   updateIfExists: UpdateIfExistsType
@@ -26,6 +27,7 @@ export const run = async (github: GitHubContext, inputs: Inputs): Promise<Output
 
   const diffs = await computeDiff(inputs.base, inputs.head)
   const body = formatComment(diffs, {
+    bodyNoDiff: inputs.commentBodyNoDiff,
     header: inputs.commentHeader,
     footer: inputs.commentFooter,
     workflowRunURL: github.workflowRunURL,

@@ -2,6 +2,7 @@ import * as core from '@actions/core'
 import { Diff } from './diff.js'
 
 type CommentOptions = {
+  bodyNoDiff: string
   header: string
   footer: string
   workflowRunURL: string
@@ -9,6 +10,9 @@ type CommentOptions = {
 
 export const formatComment = (diffs: Diff[], o: CommentOptions): string => {
   if (diffs.length === 0) {
+    if (o.bodyNoDiff === '') {
+      return ''
+    }
     return generateNoDiffComment(o)
   }
 
@@ -35,7 +39,7 @@ export const formatComment = (diffs: Diff[], o: CommentOptions): string => {
 const generateNoDiffComment = (o: CommentOptions): string => `\
 ${o.header}
 
-No diff
+${o.bodyNoDiff}
 
 ${o.footer}`
 
