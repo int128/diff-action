@@ -53,8 +53,8 @@ jobs:
       - name: e2e-test (comment-body-no-diff)
         uses: ./
         with:
-          base: tests/fixtures/body
-          head: tests/fixtures/body
+          base: tests/fixtures/head
+          head: tests/fixtures/head
           comment-body-no-diff: ''
 
   generate:
