@@ -18,8 +18,8 @@ importers:
         specifier: 6.0.0
         version: 6.0.0
       '@octokit/plugin-retry':
-        specifier: 7.1.1
-        version: 7.1.1(@octokit/core@5.1.0)
+        specifier: 7.1.2
+        version: 7.1.2(@octokit/core@5.1.0)
     devDependencies:
       '@tsconfig/node20':
         specifier: 20.1.4
@@ -430,8 +430,8 @@ packages:
     peerDependencies:
       '@octokit/core': '5'
 
-  '@octokit/plugin-retry@7.1.1':
-    resolution: {integrity: sha512-G9Ue+x2odcb8E1XIPhaFBnTTIrrUDfXN05iFXiqhR+SeeeDMMILcAnysOsxUpEWcQp2e5Ft397FCXTcPkiPkLw==}
+  '@octokit/plugin-retry@7.1.2':
+    resolution: {integrity: sha512-XOWnPpH2kJ5VTwozsxGurw+svB2e61aWlmk5EVIYZPwFK5F9h4cyPyj9CIKRyMXMHSwpIsI3mPOdpMmrRhe7UQ==}
     engines: {node: '>= 18'}
     peerDependencies:
       '@octokit/core': '>=6'
@@ -2282,7 +2282,7 @@ snapshots:
       '@octokit/core': 5.1.0
       '@octokit/types': 12.6.0
 
-  '@octokit/plugin-retry@7.1.1(@octokit/core@5.1.0)':
+  '@octokit/plugin-retry@7.1.2(@octokit/core@5.1.0)':
     dependencies:
       '@octokit/core': 5.1.0
       '@octokit/request-error': 6.1.1
