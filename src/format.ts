@@ -83,6 +83,10 @@ ${o.footer}`
 const formatSummary = (diffs: Diff[]): string =>
   diffs
     .map((d) => {
+      if (d.headRelativePath === '' && d.baseRelativePath === '') {
+        // When a file path is given to this action, omit the summary list.
+        return ''
+      }
       if (d.headRelativePath !== undefined && d.baseRelativePath !== undefined) {
         return `- ${d.headRelativePath}`
       }
