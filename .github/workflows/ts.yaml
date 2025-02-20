@@ -39,7 +39,7 @@ jobs:
           base: tests/fixtures/base
           head: tests/fixtures/head
           label: changed
-      - run: test ${{ steps.diff.outputs.different }} = true
+      - run: test '${{ steps.diff.outputs.different }}' = 'true'
 
       - name: e2e-test (no-diff)
         id: no-diff
@@ -48,7 +48,8 @@ jobs:
           base: tests/fixtures/head
           head: tests/fixtures/head
           label: changed
-      - run: test ${{ steps.no-diff.outputs.different }} = false
+      - run: test '${{ steps.no-diff.outputs.different }}' = 'false'
+      - run: test '${{ steps.no-diff.outputs.comment-body }}' = 'No diff'
 
       - name: e2e-test (comment-body-no-diff)
         uses: ./
