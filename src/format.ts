@@ -41,7 +41,7 @@ ${formatDetails(diffs, o)}
 
 </details>
 
-GitHub Actions: ${o.workflowRunURL}`
+[GitHub Actions](${o.workflowRunURL})`
 
 const generateShortComment = (diffs: Diff[], o: CommentOptions): string => `\
 ${formatSummary(diffs)}
@@ -53,12 +53,12 @@ ${formatShortDetails(diffs, o)}
 
 </details>
 
-See the full diff from ${o.workflowRunURL}`
+See the [full diff](${o.workflowRunURL})`
 
 const generateSummaryComment = (diffs: Diff[], o: CommentOptions): string => `\
 ${formatSummary(diffs)}
 
-See the full diff from ${o.workflowRunURL}`
+See the [full diff](${o.workflowRunURL})`
 
 const formatSummary = (diffs: Diff[]): string =>
   diffs
