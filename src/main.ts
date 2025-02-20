@@ -17,6 +17,7 @@ const main = async (): Promise<void> => {
   })
   core.info(`Setting the outputs to ${JSON.stringify(outputs)}`)
   core.setOutput('different', outputs.different)
+  core.setOutput('comment-body', outputs.commentBody)
 }
 
 const updateIfExistsValue = (s: string): UpdateIfExistsType => {
