@@ -1,14 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`formatComment 1`] = `
-"## diff
-
-- same.yaml
+"- same.yaml
 - after.yaml
 - new.yaml **(New)**
 - old.yaml **(Deleted)**
 
 <details>
+<summary>Diff</summary>
 
 ### same.yaml
 \`\`\`diff
@@ -29,5 +28,5 @@ delete
 
 </details>
 
-<!-- diff-action -->"
+[GitHub Actions](https://github.com/int128/diff-action/actions/runs/6282216330)"
 `;

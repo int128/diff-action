@@ -9,6 +9,7 @@ type Inputs = {
   base: string
   head: string
   label: string[]
+  comment: boolean
   commentBodyNoDiff: string
   commentHeader: string
   commentFooter: string
@@ -18,6 +19,7 @@ type Inputs = {
 
 type Outputs = {
   different: boolean
+  commentBody: string
 }
 
 export const run = async (github: GitHubContext, inputs: Inputs): Promise<Outputs> => {
@@ -26,17 +28,18 @@ export const run = async (github: GitHubContext, inputs: Inputs): Promise<Output
   core.endGroup()
 
   const diffs = await computeDiff(inputs.base, inputs.head)
-  const body = formatComment(diffs, {
+  const commentBody = formatComment(diffs, {
     bodyNoDiff: inputs.commentBodyNoDiff,
-    header: inputs.commentHeader,
-    footer: inputs.commentFooter,
     workflowRunURL: github.workflowRunURL,
   })
-  await addComment(github, {
-    body,
-    updateIfExists: inputs.updateIfExists,
-    updateIfExistsKey: inputs.updateIfExistsKey,
-  })
+
+  if (inputs.comment && commentBody.length > 0) {
+    await addComment(github, {
+      body: `${inputs.commentHeader}\n\n${commentBody}\n\n${inputs.commentFooter}`,
+      updateIfExists: inputs.updateIfExists,
+      updateIfExistsKey: inputs.updateIfExistsKey,
+    })
+  }
 
   if (diffs.length > 0) {
     await addLabels(github, inputs.label)
@@ -44,5 +47,8 @@ export const run = async (github: GitHubContext, inputs: Inputs): Promise<Output
     await removeLabels(github, inputs.label)
   }
 
-  return { different: diffs.length > 0 }
+  return {
+    different: diffs.length > 0,
+    commentBody,
+  }
 }
