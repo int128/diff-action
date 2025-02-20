@@ -3,17 +3,12 @@ import { Diff } from './diff.js'
 
 type CommentOptions = {
   bodyNoDiff: string
-  header: string
-  footer: string
   workflowRunURL: string
 }
 
 export const formatComment = (diffs: Diff[], o: CommentOptions): string => {
   if (diffs.length === 0) {
-    if (o.bodyNoDiff === '') {
-      return ''
-    }
-    return generateNoDiffComment(o)
+    return o.bodyNoDiff
   }
 
   // Comment body must be less than 64kB
@@ -33,52 +28,37 @@ export const formatComment = (diffs: Diff[], o: CommentOptions): string => {
     return summaryComment
   }
   core.info(`Fallback to last resort, because summary comment is too long (${summaryComment.length} chars)`)
-  return `${o.header}\nSee the full diff from ${o.workflowRunURL}\n${o.footer}`
+  return `See the full diff from ${o.workflowRunURL}`
 }
 
-const generateNoDiffComment = (o: CommentOptions): string => `\
-${o.header}
-
-${o.bodyNoDiff}
-
-${o.footer}`
-
 const generateFullComment = (diffs: Diff[], o: CommentOptions): string => `\
-${o.header}
-
 ${formatSummary(diffs)}
 
 <details>
+<summary>Diff</summary>
 
 ${formatDetails(diffs, o)}
 
 </details>
 
-${o.footer}`
+GitHub Actions: ${o.workflowRunURL}`
 
 const generateShortComment = (diffs: Diff[], o: CommentOptions): string => `\
-${o.header}
-
 ${formatSummary(diffs)}
 
 <details>
+<summary>Diff</summary>
 
 ${formatShortDetails(diffs, o)}
 
 </details>
 
-See the full diff from ${o.workflowRunURL}
-
-${o.footer}`
+See the full diff from ${o.workflowRunURL}`
 
 const generateSummaryComment = (diffs: Diff[], o: CommentOptions): string => `\
-${o.header}
-
 ${formatSummary(diffs)}
 
-See the full diff from ${o.workflowRunURL}
-
-${o.footer}`
+See the full diff from ${o.workflowRunURL}`
 
 const formatSummary = (diffs: Diff[]): string =>
   diffs

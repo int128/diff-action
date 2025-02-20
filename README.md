@@ -110,6 +110,7 @@ This action posts a comment on `pull_request` or `pull_request_target` event onl
 | `base`                 | (required)                                 | Path(s) of base (multiline)                                |
 | `head`                 | (required)                                 | Path(s) of head (multiline)                                |
 | `label`                | -                                          | Label(s) to add or remove to indicate the diff (multiline) |
+| `comment`              | `true`                                     | If false, do not post a comment                            |
 | `comment-body-no-diff` | No diff                                    | Comment body when no difference                            |
 | `comment-header`       | -                                          | Header of a comment to post                                |
 | `comment-footer`       | -                                          | Footer of a comment to post                                |
@@ -119,6 +120,7 @@ This action posts a comment on `pull_request` or `pull_request_target` event onl
 
 ### Outputs
 
-| Name        | Description                                            |
-| ----------- | ------------------------------------------------------ |
-| `different` | If there is any difference, `true`. Otherwise, `false` |
+| Name           | Description                                            |
+| -------------- | ------------------------------------------------------ |
+| `different`    | If there is any difference, `true`. Otherwise, `false` |
+| `comment-body` | Comment body                                           |

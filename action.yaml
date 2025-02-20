@@ -10,6 +10,10 @@ inputs:
   label:
     description: Label(s) to add or remove to indicate the diff (multiline)
     required: false
+  comment:
+    description: If false, do not post a comment
+    required: false
+    default: 'true'
   comment-body-no-diff:
     description: Comment body when no difference
     required: false
@@ -23,7 +27,6 @@ inputs:
     description: Footer of a comment to post
     required: false
     default: |
-      [See the workflow run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
       <!-- diff-action -->
   update-if-exists:
     description: Either create, replace, append or recreate
@@ -40,6 +43,8 @@ inputs:
 outputs:
   different:
     description: If there is any difference, `true`. Otherwise, `false`
+  comment-body:
+    description: Comment body
 runs:
   using: 'node20'
   main: 'dist/index.js'
