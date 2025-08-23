@@ -9,6 +9,8 @@ type Comment = {
 
 export type UpdateIfExistsType = 'create' | 'replace' | 'append' | 'recreate'
 
+export const createCommentKey = (key: string): string => `<!-- diff-action/${key} -->`
+
 export const addComment = async (github: GitHubContext, comment: Comment): Promise<void> => {
   if (!github.issueNumber) {
     core.info(`Ignored non pull request event: ${github.eventName}`)
@@ -31,7 +33,7 @@ export const addComment = async (github: GitHubContext, comment: Comment): Promi
     return
   }
 
-  const commentKey = `<!-- diff-action/${comment.updateIfExistsKey} -->`
+  const commentKey = createCommentKey(comment.updateIfExistsKey)
   core.info(`Finding key ${commentKey} from comments in #${github.issueNumber}`)
   const existingComment = await findComment(github, commentKey)
   if (!existingComment) {
@@ -105,5 +107,17 @@ const findComment = async (github: GitHubContext, key: string): Promise<Existing
     if (comment.body?.includes(key)) {
       return { ...comment, body: comment.body }
     }
+  }
+}
+
+export const deleteCommentIfExists = async (github: GitHubContext, updateIfExistsKey: string): Promise<void> => {
+  const comment = await findComment(github, createCommentKey(updateIfExistsKey))
+
+  if (comment) {
+    await github.octokit.rest.issues.deleteComment({
+      owner: github.owner,
+      repo: github.repo,
+      comment_id: comment.id,
+    })
   }
 }
