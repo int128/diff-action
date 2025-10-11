@@ -92,14 +92,16 @@ type ExistingComment = {
 }
 
 const findComment = async (github: GitHubContext, key: string): Promise<ExistingComment | undefined> => {
-  const { data: comments } = await github.octokit.rest.issues.listComments({
-    owner: github.owner,
-    repo: github.repo,
-    issue_number: github.issueNumber,
-    sort: 'created',
-    direction: 'desc',
-    per_page: 100,
-  })
+  const { data: comments } = await github.octokit.paginate(
+    github.octokit.rest.issues.listComments({
+      owner: github.owner,
+      repo: github.repo,
+      issue_number: github.issueNumber,
+      sort: 'created',
+      direction: 'desc',
+      per_page: 100,
+    })
+  )
   core.info(`Found ${comments.length} comment(s) of #${github.issueNumber}`)
   for (const comment of comments) {
     if (comment.body?.includes(key)) {
