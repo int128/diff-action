@@ -2,7 +2,7 @@ import * as core from '@actions/core'
 import { GitHubContext } from './github.js'
 import { computeDiff, showColorDiff } from './diff.js'
 import { addLabels, removeLabels } from './label.js'
-import { UpdateIfExistsType, addComment } from './comment.js'
+import { UpdateIfExistsType, addComment, deleteCommentIfExists } from './comment.js'
 import { formatComment } from './format.js'
 
 type Inputs = {
@@ -33,12 +33,16 @@ export const run = async (github: GitHubContext, inputs: Inputs): Promise<Output
     workflowRunURL: github.workflowRunURL,
   })
 
-  if (inputs.comment && commentBody.length > 0) {
-    await addComment(github, {
-      body: `${inputs.commentHeader}\n\n${commentBody}\n\n${inputs.commentFooter}`,
-      updateIfExists: inputs.updateIfExists,
-      updateIfExistsKey: inputs.updateIfExistsKey,
-    })
+  if (inputs.comment) {
+    if (commentBody.length === 0) {
+      await deleteCommentIfExists(github, inputs.updateIfExistsKey)
+    } else {
+      await addComment(github, {
+        body: `${inputs.commentHeader}\n\n${commentBody}\n\n${inputs.commentFooter}`,
+        updateIfExists: inputs.updateIfExists,
+        updateIfExistsKey: inputs.updateIfExistsKey,
+      })
+    }
   }
 
   if (diffs.length > 0) {
