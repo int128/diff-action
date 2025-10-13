@@ -1,9 +1,9 @@
 import * as core from '@actions/core'
-import { GitHubContext } from './github.js'
+import { addComment, type UpdateIfExistsType } from './comment.js'
 import { computeDiff, showColorDiff } from './diff.js'
-import { addLabels, removeLabels } from './label.js'
-import { UpdateIfExistsType, addComment } from './comment.js'
 import { formatComment } from './format.js'
+import type { GitHubContext } from './github.js'
+import { addLabels, removeLabels } from './label.js'
 
 type Inputs = {
   base: string

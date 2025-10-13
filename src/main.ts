@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
-import { run } from './run.js'
+import type { UpdateIfExistsType } from './comment.js'
 import { getGitHubContext } from './github.js'
-import { UpdateIfExistsType } from './comment.js'
+import { run } from './run.js'
 
 const main = async (): Promise<void> => {
   const outputs = await run(getGitHubContext(core.getInput('token', { required: true })), {

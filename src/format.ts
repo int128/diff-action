@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import { Diff } from './diff.js'
+import type { Diff } from './diff.js'
 
 type CommentOptions = {
   bodyNoDiff: string
