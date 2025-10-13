@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import { Diff } from './diff.js'
+import type { Diff } from './diff.js'
 
 type CommentOptions = {
   bodyNoDiff: string
@@ -76,6 +76,7 @@ const formatSummary = (diffs: Diff[]): string =>
       if (d.baseRelativePath !== undefined) {
         return `- ${d.baseRelativePath} **(Deleted)**`
       }
+      return ''
     })
     .filter((line) => line)
     .join('\n')

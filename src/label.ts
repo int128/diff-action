@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import { GitHubContext } from './github.js'
+import type { GitHubContext } from './github.js'
 
 export const addLabels = async (github: GitHubContext, labels: string[]): Promise<void> => {
   if (labels.length < 1) {

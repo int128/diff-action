@@ -1,4 +1,4 @@
-import { test, expect } from 'vitest'
+import { expect, test } from 'vitest'
 import { computeDiff } from '../src/diff.js'
 
 test('diff', async () => {
