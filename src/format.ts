@@ -76,6 +76,7 @@ const formatSummary = (diffs: Diff[]): string =>
       if (d.baseRelativePath !== undefined) {
         return `- ${d.baseRelativePath} **(Deleted)**`
       }
+      return ''
     })
     .filter((line) => line)
     .join('\n')
