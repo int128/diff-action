@@ -40,6 +40,13 @@ jobs:
           base: tests/fixtures/base
           head: tests/fixtures/head
           label: changed
+      - uses: int128/comment-action@a20dbdebd79ab886a1e7a20d16bfa7dbaa732e5a # v1.33.0
+        with:
+          update-if-exists: replace
+          update-if-exists-key: e2e-test-diff
+          post: |
+            ## e2e-test (diff)
+            ${{ steps.diff.outputs.comment-body }}
       - run: test '${{ steps.diff.outputs.different }}' = 'true'
 
       - name: e2e-test (no-diff)
@@ -49,15 +56,15 @@ jobs:
           base: tests/fixtures/head
           head: tests/fixtures/head
           label: changed
-      - run: test '${{ steps.no-diff.outputs.different }}' = 'false'
-      - run: test '${{ steps.no-diff.outputs.comment-body }}' = 'No diff'
-
-      - name: e2e-test (comment-body-no-diff)
-        uses: ./
+      - uses: int128/comment-action@a20dbdebd79ab886a1e7a20d16bfa7dbaa732e5a # v1.33.0
         with:
-          base: tests/fixtures/head
-          head: tests/fixtures/head
-          comment-body-no-diff: ''
+          update-if-exists: replace
+          update-if-exists-key: e2e-test-no-diff
+          post: |
+            ## e2e-test (no-diff)
+            ${{ steps.no-diff.outputs.comment-body }}
+      - run: test '${{ steps.no-diff.outputs.different }}' = 'false'
+      - run: test '${{ steps.no-diff.outputs.comment-body }}' = ''
 
   generate:
     runs-on: ubuntu-latest
