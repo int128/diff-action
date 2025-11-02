@@ -49,7 +49,7 @@ jobs:
             ${{ steps.diff.outputs.comment-body }}
       - run: test -n "$DIFF"
         env:
-          DIFF: ${{ steps.diff.outputs.different }}
+          DIFF: ${{ steps.diff.outputs.comment-body }}
 
       - name: e2e-test (no-diff)
         id: no-diff
