@@ -47,7 +47,9 @@ jobs:
           post: |
             ## e2e-test (diff)
             ${{ steps.diff.outputs.comment-body }}
-      - run: test '${{ steps.diff.outputs.different }}' = 'true'
+      - run: test -n "$DIFF"
+        env:
+          DIFF: ${{ steps.diff.outputs.different }}
 
       - name: e2e-test (no-diff)
         id: no-diff
@@ -63,8 +65,9 @@ jobs:
           post: |
             ## e2e-test (no-diff)
             ${{ steps.no-diff.outputs.comment-body }}
-      - run: test '${{ steps.no-diff.outputs.different }}' = 'false'
-      - run: test '${{ steps.no-diff.outputs.comment-body }}' = ''
+      - run: test -z "$BODY"
+        env:
+          BODY: ${{ steps.no-diff.outputs.comment-body }}
 
   generate:
     runs-on: ubuntu-latest

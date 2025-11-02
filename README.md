@@ -107,7 +107,6 @@ To add label(s) if there is difference or remove it if not:
 
 ### Outputs
 
-| Name           | Description                                            |
-| -------------- | ------------------------------------------------------ |
-| `different`    | If there is any difference, `true`. Otherwise, `false` |
-| `comment-body` | Comment body                                           |
+| Name           | Description  |
+| -------------- | ------------ |
+| `comment-body` | Comment body |

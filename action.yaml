@@ -15,8 +15,6 @@ inputs:
     required: true
     default: ${{ github.token }}
 outputs:
-  different:
-    description: If there is any difference, `true`. Otherwise, `false`
   comment-body:
     description: Comment body
 runs:

@@ -9,7 +9,6 @@ const main = async (): Promise<void> => {
     label: core.getMultilineInput('label', { required: false }),
   })
   core.info(`Setting the outputs to ${JSON.stringify(outputs)}`)
-  core.setOutput('different', outputs.different)
   core.setOutput('comment-body', outputs.commentBody)
 }
 

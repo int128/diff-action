@@ -11,7 +11,6 @@ type Inputs = {
 }
 
 type Outputs = {
-  different: boolean
   commentBody: string
 }
 
@@ -32,7 +31,6 @@ export const run = async (github: GitHubContext, inputs: Inputs): Promise<Output
   }
 
   return {
-    different: diffs.length > 0,
     commentBody,
   }
 }
