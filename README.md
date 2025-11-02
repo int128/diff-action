@@ -4,7 +4,7 @@ This is an action to format the diff between head and base.
 
 ## Migration to V2
 
-Since v2, this action no longer posts a comment by itself.
+This action no longer posts a comment by itself.
 You can post a comment using [int128/comment-action](https://github.com/int128/comment-action).
 
 ```yaml
