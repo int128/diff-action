@@ -9,7 +9,8 @@ You can post a comment using [int128/comment-action](https://github.com/int128/c
 
 ```yaml
 steps:
-  - uses: int128/diff-action@v2
+  - id: diff
+    uses: int128/diff-action@v2
     with:
       base: old-directory
       head: new-directory
@@ -25,7 +26,8 @@ steps:
 To get the diff between `old-directory` and `new-directory`,
 
 ```yaml
-- uses: int128/diff-action@v1
+- id: diff
+  uses: int128/diff-action@v1
   with:
     base: old-directory
     head: new-directory
@@ -52,18 +54,19 @@ jobs:
         with:
           ref: main
           path: main
-      - uses: int128/kustomize-action@v1
-        id: kustomize-head
+      - id: kustomize-head
+        uses: int128/kustomize-action@v1
         with:
           kustomization: config/default/kustomization.yaml
           write-individual-files: true
-      - uses: int128/kustomize-action@v1
-        id: kustomize-base
+      - id: kustomize-base
+        uses: int128/kustomize-action@v1
         with:
           base-directory: main
           kustomization: config/default/kustomization.yaml
           write-individual-files: true
-      - uses: int128/diff-action@v2
+      - id: diff
+        uses: int128/diff-action@v2
         with:
           base: ${{ steps.kustomize-base.outputs.directory }}
           head: ${{ steps.kustomize-head.outputs.directory }}
@@ -92,8 +95,6 @@ To add label(s) if there is difference or remove it if not:
 ```
 
 ## Specification
-
-This action posts a comment on `pull_request` or `pull_request_target` event only.
 
 ### Inputs
 
