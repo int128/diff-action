@@ -2,13 +2,12 @@ import * as core from '@actions/core'
 import type { Diff } from './diff.js'
 
 type CommentOptions = {
-  bodyNoDiff: string
   workflowRunURL: string
 }
 
 export const formatComment = (diffs: Diff[], o: CommentOptions): string => {
   if (diffs.length === 0) {
-    return o.bodyNoDiff
+    return ''
   }
 
   // Comment body must be less than 64kB

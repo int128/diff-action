@@ -1,19 +1,39 @@
 # diff-action [![ts](https://github.com/int128/diff-action/actions/workflows/ts.yaml/badge.svg)](https://github.com/int128/diff-action/actions/workflows/ts.yaml)
 
-This is an action to compute a diff between head and base, and post it to a comment.
+This is an action to format the diff between head and base.
+
+## Migration to V2
+
+This action no longer posts a comment by itself.
+You can post a comment using [int128/comment-action](https://github.com/int128/comment-action).
+
+```yaml
+steps:
+  - id: diff
+    uses: int128/diff-action@v2
+    with:
+      base: old-directory
+      head: new-directory
+  - uses: int128/comment-action@v1
+    with:
+      post: |
+        ## Diff
+        ${{ steps.diff.outputs.comment-body }}
+```
 
 ## Getting Started
 
-To post a comment of the diff between `old-directory` and `new-directory`,
+To get the diff between `old-directory` and `new-directory`,
 
 ```yaml
-- uses: int128/diff-action@v1
+- id: diff
+  uses: int128/diff-action@v1
   with:
     base: old-directory
     head: new-directory
 ```
 
-If no difference, it post a comment of "No diff" by default.
+If no difference, it returns an empty string.
 
 ### Show diff of generated manifests
 
@@ -34,21 +54,28 @@ jobs:
         with:
           ref: main
           path: main
-      - uses: int128/kustomize-action@v1
-        id: kustomize-head
+      - id: kustomize-head
+        uses: int128/kustomize-action@v1
         with:
           kustomization: config/default/kustomization.yaml
           write-individual-files: true
-      - uses: int128/kustomize-action@v1
-        id: kustomize-base
+      - id: kustomize-base
+        uses: int128/kustomize-action@v1
         with:
           base-directory: main
           kustomization: config/default/kustomization.yaml
           write-individual-files: true
-      - uses: int128/diff-action@v1
+      - id: diff
+        uses: int128/diff-action@v2
         with:
           base: ${{ steps.kustomize-base.outputs.directory }}
           head: ${{ steps.kustomize-head.outputs.directory }}
+      - uses: int128/comment-action@v1
+        with:
+          update-if-exists: replace
+          post: |
+            ## kustomize diff
+            ${{ steps.diff.outputs.comment-body }}
 ```
 
 Here is an example.
@@ -67,60 +94,19 @@ To add label(s) if there is difference or remove it if not:
     label: manifest-changed
 ```
 
-### No diff comment
-
-To change the comment of when no difference,
-
-```yaml
-- uses: int128/diff-action@v1
-  with:
-    comment-body-no-diff: No diff of kustomize build
-```
-
-To suppress any comment when no difference,
-
-```yaml
-- uses: int128/diff-action@v1
-  with:
-    comment-body-no-diff: ''
-```
-
-### Comment strategy
-
-This action supports the following strategies:
-
-- `create`: Create a new comment.
-- `replace`: Replace the body of existing comment if exists. (default)
-- `append`: Append the diff to the existing comment if exists.
-- `recreate`: Delete the existing comment and create a new one.
-
-You can change the strategy by `update-if-exists`.
-
-This action identifies the existing comment by both workflow name and job name.
-You can set a custom key to `update-if-exists-key`.
-
 ## Specification
-
-This action posts a comment on `pull_request` or `pull_request_target` event only.
 
 ### Inputs
 
-| Name                   | Default                                    | Description                                                |
-| ---------------------- | ------------------------------------------ | ---------------------------------------------------------- |
-| `base`                 | (required)                                 | Path(s) of base (multiline)                                |
-| `head`                 | (required)                                 | Path(s) of head (multiline)                                |
-| `label`                | -                                          | Label(s) to add or remove to indicate the diff (multiline) |
-| `comment`              | `true`                                     | If false, do not post a comment                            |
-| `comment-body-no-diff` | No diff                                    | Comment body when no difference                            |
-| `comment-header`       | -                                          | Header of a comment to post                                |
-| `comment-footer`       | -                                          | Footer of a comment to post                                |
-| `update-if-exists`     | (optional)                                 | Either `create`, `replace`, `append` or `recreate`         |
-| `update-if-exists-key` | `${{ github.workflow }}/${{ github.job }}` | Key for `update-if-exists`                                 |
-| `token`                | `github.token`                             | GitHub token to post a comment                             |
+| Name    | Default        | Description                                                |
+| ------- | -------------- | ---------------------------------------------------------- |
+| `base`  | (required)     | Path(s) of base (multiline)                                |
+| `head`  | (required)     | Path(s) of head (multiline)                                |
+| `label` | -              | Label(s) to add or remove to indicate the diff (multiline) |
+| `token` | `github.token` | GitHub token to post a comment                             |
 
 ### Outputs
 
-| Name           | Description                                            |
-| -------------- | ------------------------------------------------------ |
-| `different`    | If there is any difference, `true`. Otherwise, `false` |
-| `comment-body` | Comment body                                           |
+| Name           | Description  |
+| -------------- | ------------ |
+| `comment-body` | Comment body |
