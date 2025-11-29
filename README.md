@@ -6,6 +6,7 @@ This is an action to format the diff between head and base.
 
 This action no longer posts a comment by itself.
 You can post a comment using [int128/comment-action](https://github.com/int128/comment-action).
+For example,
 
 ```yaml
 steps:
@@ -16,9 +17,10 @@ steps:
       head: new-directory
   - uses: int128/comment-action@v1
     with:
+      update-if-exists: replace
       post: |
-        ## Diff
-        ${{ steps.diff.outputs.comment-body }}
+        ## ${{ github.workflow }} / ${{ github.job }}
+        ${{ steps.diff.outputs.comment-body || 'No diff' }}
 ```
 
 ## Getting Started
