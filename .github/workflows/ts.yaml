@@ -40,7 +40,7 @@ jobs:
           base: tests/fixtures/base
           head: tests/fixtures/head
           label: changed
-      - uses: int128/comment-action@a20dbdebd79ab886a1e7a20d16bfa7dbaa732e5a # v1.33.0
+      - uses: int128/comment-action@2e7e2d8e385ee24454ea30ef135d5c5867011410 # v1.46.0
         with:
           update-if-exists: replace
           update-if-exists-key: e2e-test-diff
@@ -58,7 +58,7 @@ jobs:
           base: tests/fixtures/head
           head: tests/fixtures/head
           label: changed
-      - uses: int128/comment-action@a20dbdebd79ab886a1e7a20d16bfa7dbaa732e5a # v1.33.0
+      - uses: int128/comment-action@2e7e2d8e385ee24454ea30ef135d5c5867011410 # v1.46.0
         with:
           update-if-exists: replace
           update-if-exists-key: e2e-test-no-diff
