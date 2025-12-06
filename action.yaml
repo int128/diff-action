@@ -1,5 +1,5 @@
 name: diff
-description: Compute a diff between head and base, and post it to a comment.
+description: Compute a diff between head and base
 inputs:
   base:
     description: Path(s) of base (multiline)
@@ -11,7 +11,7 @@ inputs:
     description: Label(s) to add or remove to indicate the diff (multiline)
     required: false
   token:
-    description: GitHub token to post a comment
+    description: GitHub token for label operations
     required: true
     default: ${{ github.token }}
 outputs:

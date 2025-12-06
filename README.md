@@ -105,7 +105,7 @@ To add label(s) if there is difference or remove it if not:
 | `base`  | (required)     | Path(s) of base (multiline)                                |
 | `head`  | (required)     | Path(s) of head (multiline)                                |
 | `label` | -              | Label(s) to add or remove to indicate the diff (multiline) |
-| `token` | `github.token` | GitHub token to post a comment                             |
+| `token` | `github.token` | GitHub token for label operations                          |
 
 ### Outputs
 
