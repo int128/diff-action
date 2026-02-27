@@ -78,7 +78,7 @@ const formatList = (diffs: Diff[]): string =>
       } else if (diff.status === Status.Deleted) {
         return `- \`D\` ${diff.basePath}`
       } else if (diff.status === Status.Renamed) {
-        return `- \`R\` ${diff.basePath} → ${diff.headPath}`
+        return `- \`R\` ${diff.headPath}`
       }
       return `- \`M\` ${diff.headPath}`
     })
@@ -103,10 +103,10 @@ const formatShortDetails = (diffs: Diff[], o: CommentOptions): string =>
       if (diff.patch === undefined) {
         return []
       }
-      if (diff.status === Status.Deleted) {
-        return [`### \`D\` ${diff.basePath}`]
-      } else if (diff.status === Status.Added) {
+      if (diff.status === Status.Added) {
         return [`### \`A\` ${diff.headPath}`]
+      } else if (diff.status === Status.Deleted) {
+        return [`### \`D\` ${diff.basePath}`]
       }
       const patch = formatPatch(diff, 4000, o)
       return [`### ${diff.headPath}`, ...patch]
