@@ -7,22 +7,22 @@ test('formatComment', () => {
       {
         baseRelativePath: 'same.yaml',
         headRelativePath: 'same.yaml',
-        content: `change`,
+        patch: `change`,
       },
       {
         baseRelativePath: 'before.yaml',
         headRelativePath: 'after.yaml',
-        content: `rename`,
+        patch: `rename`,
       },
       {
         baseRelativePath: undefined,
         headRelativePath: 'new.yaml',
-        content: `create`,
+        patch: `create`,
       },
       {
         baseRelativePath: 'old.yaml',
         headRelativePath: undefined,
-        content: `delete`,
+        patch: `delete`,
       },
     ],
     {

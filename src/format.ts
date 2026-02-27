@@ -119,8 +119,8 @@ const formatShortDetails = (diffs: Diff[], o: CommentOptions): string => {
 }
 
 const formatDiff = (diff: Diff, trimSize: number, o: CommentOptions): string[] => {
-  if (diff.content.length < trimSize) {
-    return ['```diff', diff.content, '```']
+  if (diff.patch.length < trimSize) {
+    return ['```diff', diff.patch, '```']
   }
-  return ['```diff', diff.content.substring(0, trimSize), '```', `See the full diff from ${o.workflowRunURL}`]
+  return ['```diff', diff.patch.substring(0, trimSize), '```', `See the full diff from ${o.workflowRunURL}`]
 }

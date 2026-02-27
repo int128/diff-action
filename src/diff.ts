@@ -9,7 +9,7 @@ export const showColorDiff = async (base: string, head: string) =>
 export type Diff = {
   baseRelativePath?: string
   headRelativePath?: string
-  content: string
+  patch: string
 }
 
 export const computeDiff = async (base: string, head: string): Promise<Diff[]> => {
@@ -28,66 +28,67 @@ export const computeDiff = async (base: string, head: string): Promise<Diff[]> =
 }
 
 const parseDiffOutput = (stdout: string, base: string, head: string): Diff[] => {
-  const chunks = splitDiffLinesToChunks(stdout)
+  const chunks = splitDiffOutputToChunks(stdout)
   return chunks.map((chunk) => parseChunk(chunk, base, head))
 }
 
 type Chunk = string[]
 
-const splitDiffLinesToChunks = (stdout: string): Chunk[] => {
+const splitDiffOutputToChunks = (stdout: string): Chunk[] => {
   const lines = stdout.split(/\r?\n/)
-  let current: Chunk = []
-  const chunks: Chunk[] = [current]
+  let currentChunk: Chunk = []
+  const chunks: Chunk[] = [currentChunk]
   for (const line of lines) {
     if (line.startsWith('diff ')) {
-      current = [line]
-      chunks.push(current)
+      currentChunk = [line]
+      chunks.push(currentChunk)
       continue
     }
-    current.push(line)
+    currentChunk.push(line)
   }
   return chunks.filter((chunk) => chunk.length > 0)
 }
 
 const parseChunk = (chunk: Chunk, base: string, head: string): Diff => {
-  // first line should be an indicator, e.g.,
+  // The first line should be the diff header.
+  // https://git-scm.com/docs/git-diff#generate_patch_text_with_p
+  // For example:
   // diff --git a/tests/fixtures/head/bar.txt b/tests/fixtures/head/bar.txt
-  const diffIndicator = chunk[0].split(/ +/)
-  const h = diffIndicator.pop()
-  const b = diffIndicator.pop()
-
-  const diffBody = trimHeaderOfChunk(chunk)
+  const diffHeaderTokens = chunk[0].split(/ +/)
+  const headPath = diffHeaderTokens.pop()
+  const basePath = diffHeaderTokens.pop()
   return {
-    baseRelativePath: parseDiffPath(b, base),
-    headRelativePath: parseDiffPath(h, head),
-    content: diffBody.join('\n'),
+    baseRelativePath: canonicalPathInDiffHeader(basePath, base),
+    headRelativePath: canonicalPathInDiffHeader(headPath, head),
+    patch: trimHeaderFromChunk(chunk),
   }
 }
 
-// parse path in diff output, e.g.,
-// a/path/to/diff-action/tests/fixtures/base/deployment.yaml
-const parseDiffPath = (s: string | undefined, prefix: string): string | undefined => {
+const canonicalPathInDiffHeader = (s: string | undefined, prefix: string): string | undefined => {
   if (s === undefined) {
     return undefined
   }
-  const a = s.split(prefix)
-  if (a.length < 2) {
+  // The path consists of a, prefix and canonicalPath.
+  // For example:
+  // a/path/to/diff-action/tests/fixtures/base/deployment.yaml
+  const prefixSegments = s.split(prefix)
+  if (prefixSegments.length < 2) {
     return undefined
   }
-  const relative = a.pop()
-  if (relative === undefined) {
+  const canonicalPath = prefixSegments.pop()
+  if (canonicalPath === undefined) {
     return undefined
   }
-  if (relative.startsWith('/')) {
-    return relative.substring(1)
+  if (canonicalPath.startsWith('/')) {
+    return canonicalPath.substring(1)
   }
-  return relative
+  return canonicalPath
 }
 
-const trimHeaderOfChunk = (chunk: Chunk): Chunk => {
-  const index = chunk.findIndex((line) => line.startsWith('-') || line.startsWith('+'))
-  if (index < 0) {
-    return chunk
+const trimHeaderFromChunk = (chunk: Chunk): string => {
+  const startIndex = chunk.findIndex((line) => line.startsWith('-') || line.startsWith('+'))
+  if (startIndex < 0) {
+    return chunk.join('\n')
   }
-  return chunk.slice(index)
+  return chunk.slice(startIndex).join('\n')
 }
