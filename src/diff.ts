@@ -68,7 +68,7 @@ const canonicalPathInDiffHeader = (s: string | undefined, prefix: string): strin
   if (s === undefined) {
     return undefined
   }
-  // The path consists of [a, prefix, canonicalPath].
+  // The path consists of a, prefix and canonicalPath.
   // For example:
   // a/path/to/diff-action/tests/fixtures/base/deployment.yaml
   const prefixSegments = s.split(prefix)
