@@ -60,7 +60,7 @@ const parseChunk = (chunk: Chunk, base: string, head: string): Diff => {
   return {
     baseRelativePath: canonicalPathInDiffHeader(basePath, base),
     headRelativePath: canonicalPathInDiffHeader(headPath, head),
-    patch: trimHeaderFromChunk(chunk),
+    patch: findPatchFromChunk(chunk),
   }
 }
 
@@ -85,10 +85,10 @@ const canonicalPathInDiffHeader = (s: string | undefined, prefix: string): strin
   return canonicalPath
 }
 
-const trimHeaderFromChunk = (chunk: Chunk): string => {
-  const startIndex = chunk.findIndex((line) => line.startsWith('-') || line.startsWith('+'))
+const findPatchFromChunk = (chunk: Chunk): string => {
+  const startIndex = chunk.findIndex((line) => line.startsWith('@@'))
   if (startIndex < 0) {
-    return chunk.join('\n')
+    return ''
   }
   return chunk.slice(startIndex).join('\n')
 }
