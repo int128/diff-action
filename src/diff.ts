@@ -10,6 +10,7 @@ export type Diff = {
   basePath: string | undefined
   headPath: string | undefined
   status: Status
+  similarityIndex: number | undefined
   patch: string | undefined
 }
 
@@ -71,6 +72,7 @@ const parseChunk = (chunk: Chunk, base: string, head: string): Diff => {
     basePath,
     headPath,
     status: determineStatus(basePath, headPath),
+    similarityIndex: findSimilarityIndexFromChunk(chunk),
     patch: findPatchFromChunk(chunk),
   }
 }
@@ -112,4 +114,14 @@ const findPatchFromChunk = (chunk: Chunk): string | undefined => {
     return undefined
   }
   return chunk.slice(startIndex).join('\n')
+}
+
+const findSimilarityIndexFromChunk = (chunk: Chunk): number | undefined => {
+  for (const line of chunk) {
+    const match = /^similarity index (\d+)%/.exec(line)
+    if (match) {
+      return parseInt(match[1], 10)
+    }
+  }
+  return undefined
 }

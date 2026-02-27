@@ -5,7 +5,7 @@ exports[`formatComment 1`] = `
   "fullComment": "4 files changed:
 
 - \`M\` same.yaml
-- \`R\` after.yaml
+- \`R(80%)\` after.yaml
 - \`A\` new.yaml
 - \`D\` old.yaml
 
@@ -16,17 +16,17 @@ exports[`formatComment 1`] = `
 \`\`\`diff
 change
 \`\`\`
-### after.yaml
+### \`R(80%)\` after.yaml
 \`\`\`diff
 --- before.yaml
 +++ after.yaml
 rename
 \`\`\`
-### new.yaml
+### \`A\` new.yaml
 \`\`\`diff
 create
 \`\`\`
-### old.yaml
+### \`D\` old.yaml
 \`\`\`diff
 delete
 \`\`\`
@@ -37,7 +37,7 @@ delete
   "listComment": "4 files changed:
 
 - \`M\` same.yaml
-- \`R\` after.yaml
+- \`R(80%)\` after.yaml
 - \`A\` new.yaml
 - \`D\` old.yaml
 
@@ -45,7 +45,7 @@ See the [full diff](https://github.com/int128/diff-action/actions/runs/628221633
   "shortComment": "4 files changed:
 
 - \`M\` same.yaml
-- \`R\` after.yaml
+- \`R(80%)\` after.yaml
 - \`A\` new.yaml
 - \`D\` old.yaml
 
@@ -56,7 +56,7 @@ See the [full diff](https://github.com/int128/diff-action/actions/runs/628221633
 \`\`\`diff
 change
 \`\`\`
-### after.yaml
+### \`R(80%)\` after.yaml
 \`\`\`diff
 --- before.yaml
 +++ after.yaml
