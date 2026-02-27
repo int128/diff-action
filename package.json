@@ -10,7 +10,7 @@
     "@actions/core": "3.0.0",
     "@actions/exec": "3.0.0",
     "@octokit/action": "8.0.4",
-    "@octokit/plugin-retry": "8.0.3"
+    "@octokit/plugin-retry": "8.1.0"
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.3",
