@@ -16,17 +16,17 @@ exports[`formatComment 1`] = `
 \`\`\`diff
 change
 \`\`\`
-### \`R(80%)\` after.yaml
+### after.yaml
 \`\`\`diff
 --- before.yaml
-+++ after.yaml
++++ after.yaml (80%)
 rename
 \`\`\`
-### \`A\` new.yaml
+### new.yaml
 \`\`\`diff
 create
 \`\`\`
-### \`D\` old.yaml
+### old.yaml
 \`\`\`diff
 delete
 \`\`\`
@@ -56,10 +56,10 @@ See the [full diff](https://github.com/int128/diff-action/actions/runs/628221633
 \`\`\`diff
 change
 \`\`\`
-### \`R(80%)\` after.yaml
+### after.yaml
 \`\`\`diff
 --- before.yaml
-+++ after.yaml
++++ after.yaml (80%)
 rename
 \`\`\`
 ### \`A\` new.yaml

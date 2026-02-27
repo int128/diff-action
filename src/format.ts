@@ -89,11 +89,11 @@ const formatFullDetails = (diffs: Diff[], o: CommentOptions): string =>
     .flatMap((diff): string[] => {
       const patch = formatPatch(diff, 10000, o)
       if (diff.status === Status.Added) {
-        return [`### \`A\` ${diff.headPath}`, ...patch]
+        return [`### ${diff.headPath}`, ...patch]
       } else if (diff.status === Status.Deleted) {
-        return [`### \`D\` ${diff.basePath}`, ...patch]
+        return [`### ${diff.basePath}`, ...patch]
       } else if (diff.status === Status.Renamed) {
-        return [`### \`R(${diff.similarityIndex}%)\` ${diff.headPath}`, ...patch]
+        return [`### ${diff.headPath}`, ...patch]
       }
       return [`### ${diff.headPath}`, ...patch]
     })
@@ -109,7 +109,7 @@ const formatShortDetails = (diffs: Diff[], o: CommentOptions): string =>
       }
       const patch = formatPatch(diff, 4000, o)
       if (diff.status === Status.Renamed) {
-        return [`### \`R(${diff.similarityIndex}%)\` ${diff.headPath}`, ...patch]
+        return [`### ${diff.headPath}`, ...patch]
       }
       return [`### ${diff.headPath}`, ...patch]
     })
@@ -118,7 +118,7 @@ const formatShortDetails = (diffs: Diff[], o: CommentOptions): string =>
 const formatPatch = (diff: Diff, trimSize: number, o: CommentOptions): string[] => {
   const renameHeader = []
   if (diff.status === Status.Renamed) {
-    renameHeader.push(`--- ${diff.basePath}`, `+++ ${diff.headPath}`)
+    renameHeader.push(`--- ${diff.basePath}`, `+++ ${diff.headPath} (${diff.similarityIndex}%)`)
   }
   if (diff.patch === undefined) {
     if (renameHeader.length > 0) {
