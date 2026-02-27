@@ -77,16 +77,16 @@ const formatList = (diffs: Diff[]): string =>
         // When a file path is given to this action, omit the summary list.
         return ''
       }
-      if (d.headRelativePath !== undefined && d.baseRelativePath !== undefined) {
-        if (d.headRelativePath !== d.baseRelativePath) {
+      if (d.headPath !== undefined && d.basePath !== undefined) {
+        if (d.patch === undefined) {
           return `- \`R\` ${d.headPath}`
         }
         return `- \`M\` ${d.headPath}`
       }
-      if (d.headRelativePath !== undefined) {
+      if (d.headPath !== undefined) {
         return `- \`A\` ${d.headPath}`
       }
-      if (d.baseRelativePath !== undefined) {
+      if (d.basePath !== undefined) {
         return `- \`D\` ${d.basePath}`
       }
       return ''
