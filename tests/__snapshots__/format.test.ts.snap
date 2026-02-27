@@ -2,7 +2,7 @@
 
 exports[`formatComment 1`] = `
 {
-  "fullComment": "4 files changed
+  "fullComment": "4 files changed:
 
 - same.yaml
 - after.yaml
@@ -32,7 +32,7 @@ delete
 </details>
 
 [GitHub Actions](https://github.com/int128/diff-action/actions/runs/6282216330)",
-  "listComment": "4 files changed
+  "listComment": "4 files changed:
 
 - same.yaml
 - after.yaml
@@ -40,7 +40,7 @@ delete
 - old.yaml **(Deleted)**
 
 See the [full diff](https://github.com/int128/diff-action/actions/runs/6282216330)",
-  "shortComment": "4 files changed
+  "shortComment": "4 files changed:
 
 - same.yaml
 - after.yaml
@@ -67,7 +67,6 @@ create
 </details>
 
 See the [full diff](https://github.com/int128/diff-action/actions/runs/6282216330)",
-  "summaryComment": "4 files changed
-See the [full diff](https://github.com/int128/diff-action/actions/runs/6282216330)",
+  "summaryComment": "4 files changed. See the [full diff](https://github.com/int128/diff-action/actions/runs/6282216330)",
 }
 `;
