@@ -7,9 +7,9 @@ export const showColorDiff = async (base: string, head: string) =>
   })
 
 export type Diff = {
-  baseRelativePath?: string
-  headRelativePath?: string
-  patch: string
+  baseRelativePath: string | undefined
+  headRelativePath: string | undefined
+  patch: string | undefined
 }
 
 export const computeDiff = async (base: string, head: string): Promise<Diff[]> => {
@@ -85,10 +85,10 @@ const canonicalPathInDiffHeader = (s: string | undefined, prefix: string): strin
   return canonicalPath
 }
 
-const findPatchFromChunk = (chunk: Chunk): string => {
+const findPatchFromChunk = (chunk: Chunk): string | undefined => {
   const startIndex = chunk.findIndex((line) => line.startsWith('@@'))
   if (startIndex < 0) {
-    return ''
+    return undefined
   }
   return chunk.slice(startIndex).join('\n')
 }

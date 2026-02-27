@@ -122,6 +122,9 @@ const formatShortDetails = (diffs: Diff[], o: CommentOptions): string => {
 }
 
 const formatDiff = (diff: Diff, trimSize: number, o: CommentOptions): string[] => {
+  if (diff.patch === undefined) {
+    return []
+  }
   if (diff.patch.length < trimSize) {
     return ['```diff', diff.patch, '```']
   }
