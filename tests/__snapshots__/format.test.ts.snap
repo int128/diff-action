@@ -1,7 +1,10 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`formatComment 1`] = `
-"- same.yaml
+{
+  "fullComment": "4 files changed:
+
+- same.yaml
 - after.yaml
 - new.yaml **(New)**
 - old.yaml **(Deleted)**
@@ -28,5 +31,42 @@ delete
 
 </details>
 
-[GitHub Actions](https://github.com/int128/diff-action/actions/runs/6282216330)"
+[GitHub Actions](https://github.com/int128/diff-action/actions/runs/6282216330)",
+  "listComment": "4 files changed:
+
+- same.yaml
+- after.yaml
+- new.yaml **(New)**
+- old.yaml **(Deleted)**
+
+See the [full diff](https://github.com/int128/diff-action/actions/runs/6282216330)",
+  "shortComment": "4 files changed:
+
+- same.yaml
+- after.yaml
+- new.yaml **(New)**
+- old.yaml **(Deleted)**
+
+<details>
+<summary>Diff</summary>
+
+### same.yaml
+\`\`\`diff
+change
+\`\`\`
+### before.yaml
+\`\`\`diff
+rename
+\`\`\`
+### undefined
+\`\`\`diff
+create
+\`\`\`
+### undefined (deleted)
+
+</details>
+
+See the [full diff](https://github.com/int128/diff-action/actions/runs/6282216330)",
+  "summaryComment": "4 files changed. See the [full diff](https://github.com/int128/diff-action/actions/runs/6282216330)",
+}
 `;

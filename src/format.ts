@@ -1,37 +1,37 @@
-import * as core from '@actions/core'
 import type { Diff } from './diff.js'
 
 type CommentOptions = {
   workflowRunURL: string
 }
 
-export const formatComment = (diffs: Diff[], o: CommentOptions): string => {
-  if (diffs.length === 0) {
-    return ''
-  }
+export type CommentSet = {
+  fullComment: string
+  shortComment: string
+  listComment: string
+  summaryComment: string
+}
 
-  // Comment body must be less than 64kB
-  // https://github.community/t/maximum-length-for-the-comment-body-in-issues-and-pr/148867
-  const fullComment = generateFullComment(diffs, o)
-  if (fullComment.length < 60000) {
-    return fullComment
+export const formatComment = (diffs: Diff[], o: CommentOptions): CommentSet => {
+  if (diffs.length === 0) {
+    return {
+      fullComment: '',
+      shortComment: '',
+      listComment: '',
+      summaryComment: '',
+    }
   }
-  core.info(`Fallback to short comment, because full comment is too long (${fullComment.length} chars)`)
-  const shortComment = generateShortComment(diffs, o)
-  if (shortComment.length < 60000) {
-    return shortComment
+  return {
+    fullComment: generateFullComment(diffs, o),
+    shortComment: generateShortComment(diffs, o),
+    listComment: generateListComment(diffs, o),
+    summaryComment: generateSummaryComment(diffs, o),
   }
-  core.info(`Fallback to summary comment, because short comment is too long (${shortComment.length} chars)`)
-  const summaryComment = generateSummaryComment(diffs, o)
-  if (summaryComment.length < 60000) {
-    return summaryComment
-  }
-  core.info(`Fallback to last resort, because summary comment is too long (${summaryComment.length} chars)`)
-  return `See the full diff from ${o.workflowRunURL}`
 }
 
 const generateFullComment = (diffs: Diff[], o: CommentOptions): string => `\
-${formatSummary(diffs)}
+${formatSummary(diffs)}:
+
+${formatList(diffs)}
 
 <details>
 <summary>Diff</summary>
@@ -43,7 +43,9 @@ ${formatDetails(diffs, o)}
 [GitHub Actions](${o.workflowRunURL})`
 
 const generateShortComment = (diffs: Diff[], o: CommentOptions): string => `\
-${formatSummary(diffs)}
+${formatSummary(diffs)}:
+
+${formatList(diffs)}
 
 <details>
 <summary>Diff</summary>
@@ -54,12 +56,21 @@ ${formatShortDetails(diffs, o)}
 
 See the [full diff](${o.workflowRunURL})`
 
-const generateSummaryComment = (diffs: Diff[], o: CommentOptions): string => `\
-${formatSummary(diffs)}
+const generateListComment = (diffs: Diff[], o: CommentOptions): string => `\
+${formatSummary(diffs)}:
+
+${formatList(diffs)}
 
 See the [full diff](${o.workflowRunURL})`
 
-const formatSummary = (diffs: Diff[]): string =>
+const generateSummaryComment = (diffs: Diff[], o: CommentOptions): string => `\
+${formatSummary(diffs)}. See the [full diff](${o.workflowRunURL})`
+
+const formatSummary = (diffs: Diff[]): string => {
+  return `${diffs.length} file${diffs.length > 1 ? 's' : ''} changed`
+}
+
+const formatList = (diffs: Diff[]): string =>
   diffs
     .map((d) => {
       if (d.headRelativePath === '' && d.baseRelativePath === '') {

@@ -12,7 +12,7 @@ const main = async (): Promise<void> => {
     getOctokit(),
     await getContext(),
   )
-  core.info(`Setting the outputs to ${JSON.stringify(outputs)}`)
+  core.info(`Setting outputs.comment-body (${outputs.commentBody.length} chars)`)
   core.setOutput('comment-body', outputs.commentBody)
 }
 
