@@ -1,4 +1,4 @@
-import { Status, type Diff } from './diff.js'
+import { type Diff, Status } from './diff.js'
 
 type CommentOptions = {
   workflowRunURL: string

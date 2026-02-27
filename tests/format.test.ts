@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest'
-import { formatComment } from '../src/format.js'
 import { Status } from '../src/diff.js'
+import { formatComment } from '../src/format.js'
 
 test('formatComment', () => {
   const comment = formatComment(
