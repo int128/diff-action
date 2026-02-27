@@ -88,7 +88,7 @@ const canonicalPathInDiffHeader = (s: string | undefined, prefix: string): strin
 const trimHeaderFromChunk = (chunk: Chunk): string => {
   const startIndex = chunk.findIndex((line) => line.startsWith('-') || line.startsWith('+'))
   if (startIndex < 0) {
-    return ''
+    return chunk.join('\n')
   }
   return chunk.slice(startIndex).join('\n')
 }
