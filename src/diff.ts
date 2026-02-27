@@ -9,7 +9,16 @@ export const showColorDiff = async (base: string, head: string) =>
 export type Diff = {
   basePath: string | undefined
   headPath: string | undefined
-  patch: string
+  status: Status
+  similarityIndex: number | undefined
+  patch: string | undefined
+}
+
+export enum Status {
+  Added,
+  Deleted,
+  Renamed,
+  Modified,
 }
 
 export const computeDiff = async (base: string, head: string): Promise<Diff[]> => {
@@ -57,11 +66,28 @@ const parseChunk = (chunk: Chunk, base: string, head: string): Diff => {
   const diffHeaderTokens = chunk[0].split(/ +/)
   const headRawPath = diffHeaderTokens.pop()
   const baseRawPath = diffHeaderTokens.pop()
+  const basePath = getCanonicalPath(baseRawPath, base)
+  const headPath = getCanonicalPath(headRawPath, head)
   return {
-    basePath: getCanonicalPath(baseRawPath, base),
-    headPath: getCanonicalPath(headRawPath, head),
-    patch: trimHeaderFromChunk(chunk),
+    basePath,
+    headPath,
+    status: determineStatus(basePath, headPath),
+    similarityIndex: findSimilarityIndexFromChunk(chunk),
+    patch: findPatchFromChunk(chunk),
   }
+}
+
+const determineStatus = (basePath: string | undefined, headPath: string | undefined): Status => {
+  if (basePath === undefined) {
+    return Status.Added
+  }
+  if (headPath === undefined) {
+    return Status.Deleted
+  }
+  if (basePath !== headPath) {
+    return Status.Renamed
+  }
+  return Status.Modified
 }
 
 const getCanonicalPath = (rawPath: string | undefined, prefix: string): string | undefined => {
@@ -82,10 +108,20 @@ const getCanonicalPath = (rawPath: string | undefined, prefix: string): string |
   return canonicalPath
 }
 
-const trimHeaderFromChunk = (chunk: Chunk): string => {
-  const startIndex = chunk.findIndex((line) => line.startsWith('-') || line.startsWith('+'))
+const findPatchFromChunk = (chunk: Chunk): string | undefined => {
+  const startIndex = chunk.findIndex((line) => line.startsWith('@@'))
   if (startIndex < 0) {
-    return chunk.join('\n')
+    return undefined
   }
   return chunk.slice(startIndex).join('\n')
+}
+
+const findSimilarityIndexFromChunk = (chunk: Chunk): number | undefined => {
+  for (const line of chunk) {
+    const match = /^similarity index (\d+)%/.exec(line)
+    if (match) {
+      return parseInt(match[1], 10)
+    }
+  }
+  return undefined
 }

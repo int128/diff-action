@@ -1,4 +1,4 @@
-import type { Diff } from './diff.js'
+import { type Diff, Status } from './diff.js'
 
 type CommentOptions = {
   workflowRunURL: string
@@ -36,7 +36,7 @@ ${formatList(diffs)}
 <details>
 <summary>Diff</summary>
 
-${formatDetails(diffs, o)}
+${formatFullDetails(diffs, o)}
 
 </details>
 
@@ -72,55 +72,68 @@ const formatSummary = (diffs: Diff[]): string => {
 
 const formatList = (diffs: Diff[]): string =>
   diffs
-    .map((d) => {
-      if (d.headPath === '' && d.basePath === '') {
-        // When a file path is given to this action, omit the summary list.
-        return ''
+    .map((diff) => {
+      if (diff.status === Status.Added) {
+        return `- \`A\` ${diff.headPath}`
+      } else if (diff.status === Status.Deleted) {
+        return `- \`D\` ${diff.basePath}`
+      } else if (diff.status === Status.Renamed) {
+        return `- \`R(${diff.similarityIndex}%)\` ${diff.headPath}`
       }
-      if (d.headPath !== undefined && d.basePath !== undefined) {
-        return `- ${d.headPath}`
-      }
-      if (d.headPath !== undefined) {
-        return `- ${d.headPath} **(New)**`
-      }
-      if (d.basePath !== undefined) {
-        return `- ${d.basePath} **(Deleted)**`
-      }
-      return ''
+      return `- \`M\` ${diff.headPath}`
     })
-    .filter((line) => line)
     .join('\n')
 
-const formatDetails = (diffs: Diff[], o: CommentOptions): string => {
-  const lines = diffs.flatMap((d) => {
-    const lines = []
-    if (d.headPath) {
-      lines.push(`### ${d.headPath}`)
-    } else if (d.basePath) {
-      lines.push(`### ${d.basePath}`)
-    }
-    lines.push(...formatDiff(d, 10000, o))
-    return lines
-  })
-  return lines.join('\n')
-}
+const formatFullDetails = (diffs: Diff[], o: CommentOptions): string =>
+  diffs
+    .flatMap((diff): string[] => {
+      const patch = formatPatch(diff, 10000, o)
+      if (diff.status === Status.Added) {
+        return [`### ${diff.headPath}`, ...patch]
+      } else if (diff.status === Status.Deleted) {
+        return [`### ${diff.basePath}`, ...patch]
+      } else if (diff.status === Status.Renamed) {
+        return [`### ${diff.headPath}`, ...patch]
+      }
+      return [`### ${diff.headPath}`, ...patch]
+    })
+    .join('\n')
 
-const formatShortDetails = (diffs: Diff[], o: CommentOptions): string => {
-  const lines = diffs.flatMap((d) => {
-    if (d.headPath === undefined && d.basePath !== undefined) {
-      return [`### ${d.headPath} (deleted)`]
-    }
-    const lines = []
-    lines.push(`### ${d.basePath}`)
-    lines.push(...formatDiff(d, 4000, o))
-    return lines
-  })
-  return lines.join('\n')
-}
+const formatShortDetails = (diffs: Diff[], o: CommentOptions): string =>
+  diffs
+    .flatMap((diff): string[] => {
+      if (diff.status === Status.Added) {
+        return [`### \`A\` ${diff.headPath}`]
+      } else if (diff.status === Status.Deleted) {
+        return [`### \`D\` ${diff.basePath}`]
+      }
+      const patch = formatPatch(diff, 4000, o)
+      if (diff.status === Status.Renamed) {
+        return [`### ${diff.headPath}`, ...patch]
+      }
+      return [`### ${diff.headPath}`, ...patch]
+    })
+    .join('\n')
 
-const formatDiff = (diff: Diff, trimSize: number, o: CommentOptions): string[] => {
-  if (diff.patch.length < trimSize) {
-    return ['```diff', diff.patch, '```']
+const formatPatch = (diff: Diff, trimSize: number, o: CommentOptions): string[] => {
+  const renameHeader = []
+  if (diff.status === Status.Renamed) {
+    renameHeader.push(`--- ${diff.basePath}`, `+++ ${diff.headPath} (${diff.similarityIndex}%)`)
   }
-  return ['```diff', diff.patch.substring(0, trimSize), '```', `See the full diff from ${o.workflowRunURL}`]
+  if (diff.patch === undefined) {
+    if (renameHeader.length > 0) {
+      return ['```diff', ...renameHeader, '```']
+    }
+    return []
+  }
+  if (diff.patch.length < trimSize) {
+    return ['```diff', ...renameHeader, diff.patch, '```']
+  }
+  return [
+    '```diff',
+    ...renameHeader,
+    diff.patch.substring(0, trimSize),
+    '```',
+    `See the full diff from ${o.workflowRunURL}`,
+  ]
 }
