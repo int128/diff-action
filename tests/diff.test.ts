@@ -3,13 +3,26 @@ import { computeDiff } from '../src/diff.js'
 
 test('diff', async () => {
   const diffs = await computeDiff(`${__dirname}/fixtures/base`, `${__dirname}/fixtures/head`)
-  expect(diffs.length).toBe(4)
-  expect(diffs[0].baseRelativePath).toBeUndefined()
-  expect(diffs[0].headRelativePath).toBe('bar.txt')
-  expect(diffs[1].baseRelativePath).toBe('foo.txt')
-  expect(diffs[1].headRelativePath).toBeUndefined()
-  expect(diffs[2].baseRelativePath).toBe('deployment.yaml')
-  expect(diffs[2].headRelativePath).toBe('rollout.yaml')
-  expect(diffs[3].baseRelativePath).toBe('service.yaml')
-  expect(diffs[3].headRelativePath).toBe('service.yaml')
+  expect(diffs).toEqual([
+    {
+      baseRelativePath: undefined,
+      headRelativePath: 'bar.txt',
+      patch: expect.stringContaining('/dev/null'),
+    },
+    {
+      baseRelativePath: 'foo.txt',
+      headRelativePath: undefined,
+      patch: expect.stringContaining('/dev/null'),
+    },
+    {
+      baseRelativePath: 'service.yaml',
+      headRelativePath: 'http.yaml',
+      patch: expect.stringContaining('rename from'),
+    },
+    {
+      baseRelativePath: 'deployment.yaml',
+      headRelativePath: 'rollout.yaml',
+      patch: expect.stringContaining('@@'),
+    },
+  ])
 })
