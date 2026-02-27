@@ -1,32 +1,32 @@
 import { expect, it } from 'vitest'
-import { computeDiff } from '../src/diff.js'
+import { computeDiff, type Diff } from '../src/diff.js'
 
 it('generates the array of Diff', async () => {
   const diffs = await computeDiff(`${__dirname}/fixtures/base`, `${__dirname}/fixtures/head`)
-  expect(diffs).toEqual([
+  expect(diffs).toEqual<Diff[]>([
     {
-      baseRelativePath: undefined,
-      headRelativePath: 'bar.txt',
+      basePath: undefined,
+      headPath: 'bar.txt',
       patch: expect.stringContaining('/dev/null'),
     },
     {
-      baseRelativePath: 'foo.txt',
-      headRelativePath: undefined,
+      basePath: 'foo.txt',
+      headPath: undefined,
       patch: expect.stringContaining('/dev/null'),
     },
     {
-      baseRelativePath: 'gateway.yaml',
-      headRelativePath: 'httproute.yaml',
+      basePath: 'gateway.yaml',
+      headPath: 'httproute.yaml',
       patch: expect.stringContaining('similarity index 100%'),
     },
     {
-      baseRelativePath: 'deployment.yaml',
-      headRelativePath: 'rollout.yaml',
+      basePath: 'deployment.yaml',
+      headPath: 'rollout.yaml',
       patch: expect.stringContaining('@@'),
     },
     {
-      baseRelativePath: 'service.yaml',
-      headRelativePath: 'service.yaml',
+      basePath: 'service.yaml',
+      headPath: 'service.yaml',
       patch: expect.stringContaining('@@'),
     },
   ])

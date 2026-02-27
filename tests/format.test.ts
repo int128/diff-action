@@ -5,23 +5,23 @@ test('formatComment', () => {
   const comment = formatComment(
     [
       {
-        baseRelativePath: 'same.yaml',
-        headRelativePath: 'same.yaml',
+        basePath: 'same.yaml',
+        headPath: 'same.yaml',
         patch: `change`,
       },
       {
-        baseRelativePath: 'before.yaml',
-        headRelativePath: 'after.yaml',
+        basePath: 'before.yaml',
+        headPath: 'after.yaml',
         patch: `rename`,
       },
       {
-        baseRelativePath: undefined,
-        headRelativePath: 'new.yaml',
+        basePath: undefined,
+        headPath: 'new.yaml',
         patch: `create`,
       },
       {
-        baseRelativePath: 'old.yaml',
-        headRelativePath: undefined,
+        basePath: 'old.yaml',
+        headPath: undefined,
         patch: `delete`,
       },
     ],
