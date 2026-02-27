@@ -73,18 +73,18 @@ const formatSummary = (diffs: Diff[]): string => {
 const formatList = (diffs: Diff[]): string =>
   diffs
     .map((d) => {
-      if (d.headRelativePath === '' && d.baseRelativePath === '') {
+      if (d.headPath === '' && d.basePath === '') {
         // When a file path is given to this action, omit the summary list.
         return ''
       }
-      if (d.headRelativePath !== undefined && d.baseRelativePath !== undefined) {
-        return `- ${d.headRelativePath}`
+      if (d.headPath !== undefined && d.basePath !== undefined) {
+        return `- ${d.headPath}`
       }
-      if (d.headRelativePath !== undefined) {
-        return `- ${d.headRelativePath} **(New)**`
+      if (d.headPath !== undefined) {
+        return `- ${d.headPath} **(New)**`
       }
-      if (d.baseRelativePath !== undefined) {
-        return `- ${d.baseRelativePath} **(Deleted)**`
+      if (d.basePath !== undefined) {
+        return `- ${d.basePath} **(Deleted)**`
       }
       return ''
     })
@@ -94,10 +94,10 @@ const formatList = (diffs: Diff[]): string =>
 const formatDetails = (diffs: Diff[], o: CommentOptions): string => {
   const lines = diffs.flatMap((d) => {
     const lines = []
-    if (d.headRelativePath) {
-      lines.push(`### ${d.headRelativePath}`)
-    } else if (d.baseRelativePath) {
-      lines.push(`### ${d.baseRelativePath}`)
+    if (d.headPath) {
+      lines.push(`### ${d.headPath}`)
+    } else if (d.basePath) {
+      lines.push(`### ${d.basePath}`)
     }
     lines.push(...formatDiff(d, 10000, o))
     return lines
@@ -107,11 +107,11 @@ const formatDetails = (diffs: Diff[], o: CommentOptions): string => {
 
 const formatShortDetails = (diffs: Diff[], o: CommentOptions): string => {
   const lines = diffs.flatMap((d) => {
-    if (d.headRelativePath === undefined && d.baseRelativePath !== undefined) {
-      return [`### ${d.headRelativePath} (deleted)`]
+    if (d.headPath === undefined && d.basePath !== undefined) {
+      return [`### ${d.headPath} (deleted)`]
     }
     const lines = []
-    lines.push(`### ${d.baseRelativePath}`)
+    lines.push(`### ${d.basePath}`)
     lines.push(...formatDiff(d, 4000, o))
     return lines
   })

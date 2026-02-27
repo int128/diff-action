@@ -7,8 +7,8 @@ export const showColorDiff = async (base: string, head: string) =>
   })
 
 export type Diff = {
-  baseRelativePath?: string
-  headRelativePath?: string
+  basePath: string | undefined
+  headPath: string | undefined
   patch: string
 }
 
@@ -58,8 +58,8 @@ const parseChunk = (chunk: Chunk, base: string, head: string): Diff => {
   const headRawPath = diffHeaderTokens.pop()
   const baseRawPath = diffHeaderTokens.pop()
   return {
-    baseRelativePath: getCanonicalPathInHeader(baseRawPath, base),
-    headRelativePath: getCanonicalPathInHeader(headRawPath, head),
+    basePath: getCanonicalPathInHeader(baseRawPath, base),
+    headPath: getCanonicalPathInHeader(headRawPath, head),
     patch: trimHeaderFromChunk(chunk),
   }
 }
