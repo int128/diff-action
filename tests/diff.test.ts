@@ -1,7 +1,7 @@
-import { expect, test } from 'vitest'
+import { expect, it } from 'vitest'
 import { computeDiff } from '../src/diff.js'
 
-test('diff', async () => {
+it('generates the array of Diff', async () => {
   const diffs = await computeDiff(`${__dirname}/fixtures/base`, `${__dirname}/fixtures/head`)
   expect(diffs).toEqual([
     {
@@ -15,13 +15,18 @@ test('diff', async () => {
       patch: expect.stringContaining('/dev/null'),
     },
     {
-      baseRelativePath: 'service.yaml',
-      headRelativePath: 'http.yaml',
-      patch: expect.stringContaining('rename from'),
+      baseRelativePath: 'gateway.yaml',
+      headRelativePath: 'httproute.yaml',
+      patch: expect.stringContaining('similarity index 100%'),
     },
     {
       baseRelativePath: 'deployment.yaml',
       headRelativePath: 'rollout.yaml',
+      patch: expect.stringContaining('@@'),
+    },
+    {
+      baseRelativePath: 'service.yaml',
+      headRelativePath: 'service.yaml',
       patch: expect.stringContaining('@@'),
     },
   ])
