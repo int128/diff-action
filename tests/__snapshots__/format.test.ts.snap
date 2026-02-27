@@ -4,10 +4,10 @@ exports[`formatComment 1`] = `
 {
   "fullComment": "4 files changed:
 
-- same.yaml
-- after.yaml
-- new.yaml **(New)**
-- old.yaml **(Deleted)**
+- \`M\` same.yaml
+- \`R\` before.yaml → after.yaml
+- \`A\` new.yaml
+- \`D\` old.yaml
 
 <details>
 <summary>Diff</summary>
@@ -16,7 +16,11 @@ exports[`formatComment 1`] = `
 \`\`\`diff
 change
 \`\`\`
-### after.yaml
+### Renamed
+\`\`\`
+--- before.yaml
++++ after.yaml
+\`\`\`
 \`\`\`diff
 rename
 \`\`\`
@@ -34,35 +38,32 @@ delete
 [GitHub Actions](https://github.com/int128/diff-action/actions/runs/6282216330)",
   "listComment": "4 files changed:
 
-- same.yaml
-- after.yaml
-- new.yaml **(New)**
-- old.yaml **(Deleted)**
+- \`M\` same.yaml
+- \`R\` before.yaml → after.yaml
+- \`A\` new.yaml
+- \`D\` old.yaml
 
 See the [full diff](https://github.com/int128/diff-action/actions/runs/6282216330)",
   "shortComment": "4 files changed:
 
-- same.yaml
-- after.yaml
-- new.yaml **(New)**
-- old.yaml **(Deleted)**
+- \`M\` same.yaml
+- \`R\` before.yaml → after.yaml
+- \`A\` new.yaml
+- \`D\` old.yaml
 
 <details>
 <summary>Diff</summary>
 
-### same.yaml
+### \`M\` same.yaml
 \`\`\`diff
 change
 \`\`\`
-### before.yaml
+### \`R\` before.yaml → after.yaml
 \`\`\`diff
 rename
 \`\`\`
-### undefined
-\`\`\`diff
-create
-\`\`\`
-### undefined (deleted)
+### \`A\` new.yaml
+### \`D\` old.yaml
 
 </details>
 

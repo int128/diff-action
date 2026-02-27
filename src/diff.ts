@@ -9,7 +9,15 @@ export const showColorDiff = async (base: string, head: string) =>
 export type Diff = {
   basePath: string | undefined
   headPath: string | undefined
+  status: Status
   patch: string | undefined
+}
+
+export enum Status {
+  Added,
+  Deleted,
+  Renamed,
+  Modified,
 }
 
 export const computeDiff = async (base: string, head: string): Promise<Diff[]> => {
@@ -57,11 +65,27 @@ const parseChunk = (chunk: Chunk, base: string, head: string): Diff => {
   const diffHeaderTokens = chunk[0].split(/ +/)
   const headRawPath = diffHeaderTokens.pop()
   const baseRawPath = diffHeaderTokens.pop()
+  const basePath = getCanonicalPath(baseRawPath, base)
+  const headPath = getCanonicalPath(headRawPath, head)
   return {
-    basePath: getCanonicalPath(baseRawPath, base),
-    headPath: getCanonicalPath(headRawPath, head),
+    basePath,
+    headPath,
+    status: determineStatus(basePath, headPath),
     patch: findPatchFromChunk(chunk),
   }
+}
+
+const determineStatus = (basePath: string | undefined, headPath: string | undefined): Status => {
+  if (basePath === undefined) {
+    return Status.Added
+  }
+  if (headPath === undefined) {
+    return Status.Deleted
+  }
+  if (basePath !== headPath) {
+    return Status.Renamed
+  }
+  return Status.Modified
 }
 
 const getCanonicalPath = (rawPath: string | undefined, prefix: string): string | undefined => {
