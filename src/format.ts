@@ -78,13 +78,16 @@ const formatList = (diffs: Diff[]): string =>
         return ''
       }
       if (d.headRelativePath !== undefined && d.baseRelativePath !== undefined) {
-        return `- **M** ${d.headRelativePath}`
+        if (d.headRelativePath !== d.baseRelativePath) {
+          return `- \`R\` ${d.headRelativePath}`
+        }
+        return `- \`M\` ${d.headRelativePath}`
       }
       if (d.headRelativePath !== undefined) {
-        return `- **A** ${d.headRelativePath}`
+        return `- \`A\` ${d.headRelativePath}`
       }
       if (d.baseRelativePath !== undefined) {
-        return `- **D** ${d.baseRelativePath}`
+        return `- \`D\` ${d.baseRelativePath}`
       }
       return ''
     })
