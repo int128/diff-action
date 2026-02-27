@@ -58,13 +58,13 @@ const parseChunk = (chunk: Chunk, base: string, head: string): Diff => {
   const headRawPath = diffHeaderTokens.pop()
   const baseRawPath = diffHeaderTokens.pop()
   return {
-    basePath: getCanonicalPathInHeader(baseRawPath, base),
-    headPath: getCanonicalPathInHeader(headRawPath, head),
+    basePath: getCanonicalPath(baseRawPath, base),
+    headPath: getCanonicalPath(headRawPath, head),
     patch: trimHeaderFromChunk(chunk),
   }
 }
 
-const getCanonicalPathInHeader = (rawPath: string | undefined, prefix: string): string | undefined => {
+const getCanonicalPath = (rawPath: string | undefined, prefix: string): string | undefined => {
   if (rawPath === undefined) {
     return undefined
   }
