@@ -95,8 +95,8 @@ const formatFullDetails = (diffs: Diff[], o: CommentOptions): string =>
       } else if (diff.status === Status.Renamed) {
         return [
           `### Renamed`,
-          //
-          '```',
+          // Show the filename changes in the diff block.
+          '```diff',
           `--- ${diff.basePath}`,
           `+++ ${diff.headPath}`,
           '```',
