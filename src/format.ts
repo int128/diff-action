@@ -92,16 +92,6 @@ const formatFullDetails = (diffs: Diff[], o: CommentOptions): string =>
         return [`### ${diff.headPath}`, ...patch]
       } else if (diff.status === Status.Deleted) {
         return [`### ${diff.basePath}`, ...patch]
-      } else if (diff.status === Status.Renamed) {
-        return [
-          `### Renamed`,
-          // Show the filename changes in the diff block.
-          '```diff',
-          `--- ${diff.basePath}`,
-          `+++ ${diff.headPath}`,
-          '```',
-          ...patch,
-        ]
       }
       return [`### ${diff.headPath}`, ...patch]
     })
@@ -119,19 +109,29 @@ const formatShortDetails = (diffs: Diff[], o: CommentOptions): string =>
         return [`### \`A\` ${diff.headPath}`]
       }
       const patch = formatPatch(diff, 4000, o)
-      if (diff.status === Status.Renamed) {
-        return [`### \`R\` ${diff.basePath} → ${diff.headPath}`, ...patch]
-      }
-      return [`### \`M\` ${diff.headPath}`, ...patch]
+      return [`### ${diff.headPath}`, ...patch]
     })
     .join('\n')
 
 const formatPatch = (diff: Diff, trimSize: number, o: CommentOptions): string[] => {
+  const renameHeader = []
+  if (diff.status === Status.Renamed) {
+    renameHeader.push(`--- ${diff.basePath}`, `+++ ${diff.headPath}`)
+  }
   if (diff.patch === undefined) {
+    if (renameHeader.length > 0) {
+      return ['```diff', ...renameHeader, '```']
+    }
     return []
   }
   if (diff.patch.length < trimSize) {
-    return ['```diff', diff.patch, '```']
+    return ['```diff', ...renameHeader, diff.patch, '```']
   }
-  return ['```diff', diff.patch.substring(0, trimSize), '```', `See the full diff from ${o.workflowRunURL}`]
+  return [
+    '```diff',
+    ...renameHeader,
+    diff.patch.substring(0, trimSize),
+    '```',
+    `See the full diff from ${o.workflowRunURL}`,
+  ]
 }
