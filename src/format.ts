@@ -29,7 +29,7 @@ export const formatComment = (diffs: Diff[], o: CommentOptions): CommentSet => {
 }
 
 const generateFullComment = (diffs: Diff[], o: CommentOptions): string => `\
-${formatSummary(diffs)}
+${formatSummary(diffs)}:
 
 ${formatList(diffs)}
 
@@ -43,7 +43,7 @@ ${formatDetails(diffs, o)}
 [GitHub Actions](${o.workflowRunURL})`
 
 const generateShortComment = (diffs: Diff[], o: CommentOptions): string => `\
-${formatSummary(diffs)}
+${formatSummary(diffs)}:
 
 ${formatList(diffs)}
 
@@ -57,15 +57,14 @@ ${formatShortDetails(diffs, o)}
 See the [full diff](${o.workflowRunURL})`
 
 const generateListComment = (diffs: Diff[], o: CommentOptions): string => `\
-${formatSummary(diffs)}
+${formatSummary(diffs)}:
 
 ${formatList(diffs)}
 
 See the [full diff](${o.workflowRunURL})`
 
 const generateSummaryComment = (diffs: Diff[], o: CommentOptions): string => `\
-${formatSummary(diffs)}
-See the [full diff](${o.workflowRunURL})`
+${formatSummary(diffs)}. See the [full diff](${o.workflowRunURL})`
 
 const formatSummary = (diffs: Diff[]): string => {
   return `${diffs.length} file${diffs.length > 1 ? 's' : ''} changed`
