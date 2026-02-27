@@ -55,30 +55,27 @@ const parseChunk = (chunk: Chunk, base: string, head: string): Diff => {
   // For example:
   // diff --git a/tests/fixtures/head/bar.txt b/tests/fixtures/head/bar.txt
   const diffHeaderTokens = chunk[0].split(/ +/)
-  const headPath = diffHeaderTokens.pop()
-  const basePath = diffHeaderTokens.pop()
+  const headRawPath = diffHeaderTokens.pop()
+  const baseRawPath = diffHeaderTokens.pop()
   return {
-    baseRelativePath: canonicalPathInDiffHeader(basePath, base),
-    headRelativePath: canonicalPathInDiffHeader(headPath, head),
+    baseRelativePath: getCanonicalPathInHeader(baseRawPath, base),
+    headRelativePath: getCanonicalPathInHeader(headRawPath, head),
     patch: trimHeaderFromChunk(chunk),
   }
 }
 
-const canonicalPathInDiffHeader = (s: string | undefined, prefix: string): string | undefined => {
-  if (s === undefined) {
+const getCanonicalPathInHeader = (rawPath: string | undefined, prefix: string): string | undefined => {
+  if (rawPath === undefined) {
     return undefined
   }
   // The path consists of a, prefix and canonicalPath.
   // For example:
   // a/path/to/diff-action/tests/fixtures/base/deployment.yaml
-  const prefixSegments = s.split(prefix)
-  if (prefixSegments.length < 2) {
+  const prefixIndex = rawPath.indexOf(prefix)
+  if (prefixIndex === -1) {
     return undefined
   }
-  const canonicalPath = prefixSegments.pop()
-  if (canonicalPath === undefined) {
-    return undefined
-  }
+  const canonicalPath = rawPath.substring(prefixIndex + prefix.length)
   if (canonicalPath.startsWith('/')) {
     return canonicalPath.substring(1)
   }
