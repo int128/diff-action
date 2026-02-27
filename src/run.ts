@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
 import type { Octokit } from '@octokit/action'
 import { computeDiff, showColorDiff } from './diff.js'
-import { CommentSet, formatComment } from './format.js'
+import { type CommentSet, formatComment } from './format.js'
 import type { Context } from './github.js'
 import { addLabels, removeLabels } from './label.js'
 
