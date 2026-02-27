@@ -9,7 +9,7 @@ export const showColorDiff = async (base: string, head: string) =>
 export type Diff = {
   baseRelativePath?: string
   headRelativePath?: string
-  content: string
+  patch: string
 }
 
 export const computeDiff = async (base: string, head: string): Promise<Diff[]> => {
@@ -60,7 +60,7 @@ const parseChunk = (chunk: Chunk, base: string, head: string): Diff => {
   return {
     baseRelativePath: canonicalPathInDiffHeader(basePath, base),
     headRelativePath: canonicalPathInDiffHeader(headPath, head),
-    content: trimHeaderFromChunk(chunk),
+    patch: trimHeaderFromChunk(chunk),
   }
 }
 
