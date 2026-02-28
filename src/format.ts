@@ -67,7 +67,41 @@ const generateSummaryComment = (diffs: Diff[], o: CommentOptions): string => `\
 ${formatSummary(diffs)}. See the [full diff](${o.workflowRunURL})`
 
 const formatSummary = (diffs: Diff[]): string => {
-  return `${diffs.length} file${diffs.length > 1 ? 's' : ''} changed`
+  const breakdown = {
+    added: 0,
+    deleted: 0,
+    renamed100: 0,
+    renamed99: 0,
+    modified: 0,
+  }
+  for (const diff of diffs) {
+    if (diff.status === Status.Added) {
+      breakdown.added++
+    } else if (diff.status === Status.Deleted) {
+      breakdown.deleted++
+    } else if (diff.status === Status.Renamed) {
+      if (diff.similarityIndex === 100) {
+        breakdown.renamed100++
+      } else {
+        breakdown.renamed99++
+      }
+    } else if (diff.status === Status.Modified) {
+      breakdown.modified++
+    }
+  }
+  const parts = []
+  if (breakdown.added > 0) {
+    parts.push(`\`A\` ${breakdown.added}`)
+  } else if (breakdown.deleted > 0) {
+    parts.push(`\`D\` ${breakdown.deleted}`)
+  } else if (breakdown.renamed100 > 0) {
+    parts.push(`\`R(100%)\` ${breakdown.renamed100}`)
+  } else if (breakdown.renamed99 > 0) {
+    parts.push(`\`R(-99%)\` ${breakdown.renamed99}`)
+  } else if (breakdown.modified > 0) {
+    parts.push(`\`M\` ${breakdown.modified}`)
+  }
+  return `${diffs.length} file${diffs.length > 1 ? 's' : ''} changed (${parts.join(', ')})`
 }
 
 const formatList = (diffs: Diff[]): string =>
