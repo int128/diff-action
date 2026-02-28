@@ -33,6 +33,10 @@ ${formatSummary(diffs)}:
 
 ${formatList(diffs)}
 
+Status:
+
+${formatBreakdown(diffs)}
+
 <details>
 <summary>Diff</summary>
 
@@ -46,6 +50,10 @@ const generateShortComment = (diffs: Diff[], o: CommentOptions): string => `\
 ${formatSummary(diffs)}:
 
 ${formatList(diffs)}
+
+Status:
+
+${formatBreakdown(diffs)}
 
 <details>
 <summary>Diff</summary>
@@ -61,12 +69,24 @@ ${formatSummary(diffs)}:
 
 ${formatList(diffs)}
 
+Status:
+
+${formatBreakdown(diffs)}
+
 See the [full diff](${o.workflowRunURL})`
 
 const generateSummaryComment = (diffs: Diff[], o: CommentOptions): string => `\
-${formatSummary(diffs)}. See the [full diff](${o.workflowRunURL})`
+${formatSummary(diffs)}:
+
+${formatBreakdown(diffs)}
+
+See the [full diff](${o.workflowRunURL})`
 
 const formatSummary = (diffs: Diff[]): string => {
+  return `${diffs.length} file${diffs.length > 1 ? 's' : ''} changed`
+}
+
+const formatBreakdown = (diffs: Diff[]): string => {
   const breakdown = {
     added: 0,
     deleted: 0,
@@ -89,23 +109,23 @@ const formatSummary = (diffs: Diff[]): string => {
       breakdown.modified++
     }
   }
-  const parts = []
+  const items = []
   if (breakdown.added > 0) {
-    parts.push(`${breakdown.added} Added`)
+    items.push(`- ${breakdown.added} added \`A\``)
   }
   if (breakdown.deleted > 0) {
-    parts.push(`${breakdown.deleted} Deleted`)
+    items.push(`- ${breakdown.deleted} deleted \`D\``)
   }
   if (breakdown.renamed100 > 0) {
-    parts.push(`${breakdown.renamed100} Renamed(100%)`)
+    items.push(`- ${breakdown.renamed100} renamed (similarity 100%) \`R(100%)\``)
   }
   if (breakdown.renamed99 > 0) {
-    parts.push(`${breakdown.renamed99} Renamed(~99%)`)
+    items.push(`- ${breakdown.renamed99} renamed (similarity ~99%) \`R(nn%)\``)
   }
   if (breakdown.modified > 0) {
-    parts.push(`${breakdown.modified} Modified`)
+    items.push(`- ${breakdown.modified} modified \`M\``)
   }
-  return `${diffs.length} file${diffs.length > 1 ? 's' : ''} changed (${parts.join(', ')})`
+  return items.join('\n')
 }
 
 const formatList = (diffs: Diff[]): string =>
