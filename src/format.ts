@@ -33,8 +33,6 @@ ${formatSummary(diffs)}:
 
 ${formatList(diffs)}
 
-Status:
-
 ${formatBreakdown(diffs)}
 
 <details>
@@ -51,8 +49,6 @@ ${formatSummary(diffs)}:
 
 ${formatList(diffs)}
 
-Status:
-
 ${formatBreakdown(diffs)}
 
 <details>
@@ -68,8 +64,6 @@ const generateListComment = (diffs: Diff[], o: CommentOptions): string => `\
 ${formatSummary(diffs)}:
 
 ${formatList(diffs)}
-
-Status:
 
 ${formatBreakdown(diffs)}
 
@@ -111,21 +105,21 @@ const formatBreakdown = (diffs: Diff[]): string => {
   }
   const items = []
   if (breakdown.added > 0) {
-    items.push(`- ${breakdown.added} added \`A\``)
+    items.push(`${breakdown.added} added \`A\``)
   }
   if (breakdown.deleted > 0) {
-    items.push(`- ${breakdown.deleted} deleted \`D\``)
+    items.push(`${breakdown.deleted} deleted \`D\``)
   }
   if (breakdown.renamed100 > 0) {
-    items.push(`- ${breakdown.renamed100} renamed (identical) \`R(100%)\``)
+    items.push(`${breakdown.renamed100} renamed (identical) \`R(100%)\``)
   }
   if (breakdown.renamed99 > 0) {
-    items.push(`- ${breakdown.renamed99} renamed (similar) \`R(~99%)\``)
+    items.push(`${breakdown.renamed99} renamed (similar) \`R(~99%)\``)
   }
   if (breakdown.modified > 0) {
-    items.push(`- ${breakdown.modified} modified \`M\``)
+    items.push(`${breakdown.modified} modified \`M\``)
   }
-  return items.join('\n')
+  return items.join(', ')
 }
 
 const formatList = (diffs: Diff[]): string =>
