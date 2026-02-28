@@ -117,10 +117,10 @@ const formatBreakdown = (diffs: Diff[]): string => {
     items.push(`- ${breakdown.deleted} deleted \`D\``)
   }
   if (breakdown.renamed100 > 0) {
-    items.push(`- ${breakdown.renamed100} renamed (similarity 100%) \`R(100%)\``)
+    items.push(`- ${breakdown.renamed100} renamed (identical) \`R(100%)\``)
   }
   if (breakdown.renamed99 > 0) {
-    items.push(`- ${breakdown.renamed99} renamed (similarity ~99%) \`R(nn%)\``)
+    items.push(`- ${breakdown.renamed99} renamed (similar) \`R(~99%)\``)
   }
   if (breakdown.modified > 0) {
     items.push(`- ${breakdown.modified} modified \`M\``)
