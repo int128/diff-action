@@ -9,6 +9,8 @@ exports[`formatComment 1`] = `
 - \`A\` new.yaml
 - \`D\` old.yaml
 
+1 added \`A\`, 1 deleted \`D\`, 1 renamed (similar) \`R(~99%)\`, 1 modified \`M\`
+
 <details>
 <summary>Diff</summary>
 
@@ -41,6 +43,8 @@ delete
 - \`A\` new.yaml
 - \`D\` old.yaml
 
+1 added \`A\`, 1 deleted \`D\`, 1 renamed (similar) \`R(~99%)\`, 1 modified \`M\`
+
 See the [full diff](https://github.com/int128/diff-action/actions/runs/6282216330)",
   "shortComment": "4 files changed:
 
@@ -48,6 +52,8 @@ See the [full diff](https://github.com/int128/diff-action/actions/runs/628221633
 - \`R(80%)\` after.yaml
 - \`A\` new.yaml
 - \`D\` old.yaml
+
+1 added \`A\`, 1 deleted \`D\`, 1 renamed (similar) \`R(~99%)\`, 1 modified \`M\`
 
 <details>
 <summary>Diff</summary>
@@ -68,6 +74,10 @@ rename
 </details>
 
 See the [full diff](https://github.com/int128/diff-action/actions/runs/6282216330)",
-  "summaryComment": "4 files changed. See the [full diff](https://github.com/int128/diff-action/actions/runs/6282216330)",
+  "summaryComment": "4 files changed:
+
+1 added \`A\`, 1 deleted \`D\`, 1 renamed (similar) \`R(~99%)\`, 1 modified \`M\`
+
+See the [full diff](https://github.com/int128/diff-action/actions/runs/6282216330)",
 }
 `;
