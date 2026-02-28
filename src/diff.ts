@@ -102,6 +102,10 @@ export const getCanonicalPath = (rawPath: string | undefined, prefix: string): s
     return undefined
   }
   const canonicalPath = rawPath.substring(prefixIndex + prefix.length)
+  if (canonicalPath === '') {
+    // When this action is called against a single file, show the filename.
+    return prefix.split('/').pop()
+  }
   if (canonicalPath.startsWith('/')) {
     return canonicalPath.substring(1)
   }

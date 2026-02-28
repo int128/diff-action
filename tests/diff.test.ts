@@ -62,6 +62,15 @@ describe('getCanonicalPath', () => {
     ).toBe('deployment.yaml')
   })
 
+  it('returns the filename if the canonical path is empty', () => {
+    expect(
+      getCanonicalPath(
+        'a/path/to/diff-action/tests/fixtures/base/deployment.yaml',
+        `/path/to/diff-action/tests/fixtures/base/deployment.yaml`,
+      ),
+    ).toBe('deployment.yaml')
+  })
+
   it('returns undefined if the raw path does not contain the prefix', () => {
     expect(getCanonicalPath('/dev/null', '/path/to/diff-action/tests/fixtures/base')).toBeUndefined()
   })
