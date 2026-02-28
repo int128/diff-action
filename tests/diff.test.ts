@@ -1,5 +1,4 @@
-import { describe } from 'node:test'
-import { expect, it } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { computeDiff, type Diff, getCanonicalPath, Status } from '../src/diff.js'
 
 it('generates the array of Diff', async () => {
