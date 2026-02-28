@@ -90,7 +90,7 @@ const determineStatus = (basePath: string | undefined, headPath: string | undefi
   return Status.Modified
 }
 
-const getCanonicalPath = (rawPath: string | undefined, prefix: string): string | undefined => {
+export const getCanonicalPath = (rawPath: string | undefined, prefix: string): string | undefined => {
   if (rawPath === undefined) {
     return undefined
   }
