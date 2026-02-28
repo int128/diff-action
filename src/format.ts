@@ -33,6 +33,8 @@ ${formatSummary(diffs)}:
 
 ${formatList(diffs)}
 
+${formatBreakdown(diffs)}
+
 <details>
 <summary>Diff</summary>
 
@@ -46,6 +48,8 @@ const generateShortComment = (diffs: Diff[], o: CommentOptions): string => `\
 ${formatSummary(diffs)}:
 
 ${formatList(diffs)}
+
+${formatBreakdown(diffs)}
 
 <details>
 <summary>Diff</summary>
@@ -61,13 +65,61 @@ ${formatSummary(diffs)}:
 
 ${formatList(diffs)}
 
+${formatBreakdown(diffs)}
+
 See the [full diff](${o.workflowRunURL})`
 
 const generateSummaryComment = (diffs: Diff[], o: CommentOptions): string => `\
-${formatSummary(diffs)}. See the [full diff](${o.workflowRunURL})`
+${formatSummary(diffs)}:
+
+${formatBreakdown(diffs)}
+
+See the [full diff](${o.workflowRunURL})`
 
 const formatSummary = (diffs: Diff[]): string => {
   return `${diffs.length} file${diffs.length > 1 ? 's' : ''} changed`
+}
+
+const formatBreakdown = (diffs: Diff[]): string => {
+  const breakdown = {
+    added: 0,
+    deleted: 0,
+    renamed100: 0,
+    renamed99: 0,
+    modified: 0,
+  }
+  for (const diff of diffs) {
+    if (diff.status === Status.Added) {
+      breakdown.added++
+    } else if (diff.status === Status.Deleted) {
+      breakdown.deleted++
+    } else if (diff.status === Status.Renamed) {
+      if (diff.similarityIndex === 100) {
+        breakdown.renamed100++
+      } else {
+        breakdown.renamed99++
+      }
+    } else if (diff.status === Status.Modified) {
+      breakdown.modified++
+    }
+  }
+  const items = []
+  if (breakdown.added > 0) {
+    items.push(`${breakdown.added} added \`A\``)
+  }
+  if (breakdown.deleted > 0) {
+    items.push(`${breakdown.deleted} deleted \`D\``)
+  }
+  if (breakdown.renamed100 > 0) {
+    items.push(`${breakdown.renamed100} renamed (identical) \`R(100%)\``)
+  }
+  if (breakdown.renamed99 > 0) {
+    items.push(`${breakdown.renamed99} renamed (similar) \`R(~99%)\``)
+  }
+  if (breakdown.modified > 0) {
+    items.push(`${breakdown.modified} modified \`M\``)
+  }
+  return items.join(', ')
 }
 
 const formatList = (diffs: Diff[]): string =>
