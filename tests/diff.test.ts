@@ -1,5 +1,5 @@
-import { expect, it } from 'vitest'
-import { computeDiff, type Diff, Status } from '../src/diff.js'
+import { describe, expect, it } from 'vitest'
+import { computeDiff, type Diff, getCanonicalPath, Status } from '../src/diff.js'
 
 it('generates the array of Diff', async () => {
   const diffs = await computeDiff(`${__dirname}/fixtures/base`, `${__dirname}/fixtures/head`)
@@ -40,4 +40,37 @@ it('generates the array of Diff', async () => {
       patch: expect.stringContaining('@@'),
     },
   ])
+})
+
+describe('getCanonicalPath', () => {
+  it('returns the canonical path by removing the prefix and the leading segment', () => {
+    expect(
+      getCanonicalPath(
+        'a/path/to/diff-action/tests/fixtures/base/deployment.yaml',
+        `/path/to/diff-action/tests/fixtures/base/`,
+      ),
+    ).toBe('deployment.yaml')
+  })
+
+  it('trims the leading / if the canonical path starts with it', () => {
+    expect(
+      getCanonicalPath(
+        'a/path/to/diff-action/tests/fixtures/base/deployment.yaml',
+        `/path/to/diff-action/tests/fixtures/base`,
+      ),
+    ).toBe('deployment.yaml')
+  })
+
+  it('returns the filename if the canonical path is empty', () => {
+    expect(
+      getCanonicalPath(
+        'a/path/to/diff-action/tests/fixtures/base/deployment.yaml',
+        `/path/to/diff-action/tests/fixtures/base/deployment.yaml`,
+      ),
+    ).toBe('deployment.yaml')
+  })
+
+  it('returns undefined if the raw path does not contain the prefix', () => {
+    expect(getCanonicalPath('/dev/null', '/path/to/diff-action/tests/fixtures/base')).toBeUndefined()
+  })
 })

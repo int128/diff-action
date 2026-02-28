@@ -45,8 +45,8 @@ jobs:
       - run: pnpm i
       - run: pnpm build
 
-      - name: e2e-test (diff)
-        id: diff
+      - name: e2e-test (directory)
+        id: diff-directory
         uses: ./
         with:
           base: tests/fixtures/base
@@ -55,13 +55,30 @@ jobs:
       - uses: int128/comment-action@66317511bc86c47bd51e03059040e8a460a167b8 # v1.52.0
         with:
           update-if-exists: replace
-          update-if-exists-key: e2e-test-diff
+          update-if-exists-key: e2e-test-directory
           post: |
-            ## e2e-test (diff)
-            ${{ steps.diff.outputs.comment-body }}
+            ## e2e-test (directory)
+            ${{ steps.diff-directory.outputs.comment-body }}
       - run: test -n "$DIFF"
         env:
-          DIFF: ${{ steps.diff.outputs.comment-body }}
+          DIFF: ${{ steps.diff-directory.outputs.comment-body }}
+
+      - name: e2e-test (file)
+        id: diff-file
+        uses: ./
+        with:
+          base: tests/fixtures/base/service.yaml
+          head: tests/fixtures/head/service.yaml
+      - uses: int128/comment-action@66317511bc86c47bd51e03059040e8a460a167b8 # v1.52.0
+        with:
+          update-if-exists: replace
+          update-if-exists-key: e2e-test-file
+          post: |
+            ## e2e-test (file)
+            ${{ steps.diff-file.outputs.comment-body }}
+      - run: test -n "$DIFF"
+        env:
+          DIFF: ${{ steps.diff-file.outputs.comment-body }}
 
       - name: e2e-test (no-diff)
         id: no-diff
