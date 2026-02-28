@@ -91,19 +91,19 @@ const formatSummary = (diffs: Diff[]): string => {
   }
   const parts = []
   if (breakdown.added > 0) {
-    parts.push(`\`A\` ${breakdown.added}`)
+    parts.push(`${breakdown.added} Added`)
   }
   if (breakdown.deleted > 0) {
-    parts.push(`\`D\` ${breakdown.deleted}`)
+    parts.push(`${breakdown.deleted} Deleted`)
   }
   if (breakdown.renamed100 > 0) {
-    parts.push(`\`R(100%)\` ${breakdown.renamed100}`)
+    parts.push(`${breakdown.renamed100} Renamed(100%)`)
   }
   if (breakdown.renamed99 > 0) {
-    parts.push(`\`R(-99%)\` ${breakdown.renamed99}`)
+    parts.push(`${breakdown.renamed99} Renamed(~99%)`)
   }
   if (breakdown.modified > 0) {
-    parts.push(`\`M\` ${breakdown.modified}`)
+    parts.push(`${breakdown.modified} Modified`)
   }
   return `${diffs.length} file${diffs.length > 1 ? 's' : ''} changed (${parts.join(', ')})`
 }
