@@ -16,7 +16,7 @@
     "@biomejs/biome": "2.5.2",
     "@octokit/webhooks-types": "7.6.1",
     "@tsconfig/node24": "24.0.4",
-    "@types/node": "24.13.2",
+    "@types/node": "24.13.3",
     "@vercel/ncc": "0.44.1",
     "pnpm": "11.9.0",
     "typescript": "6.0.3",
