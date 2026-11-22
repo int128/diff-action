@@ -4,8 +4,8 @@ metadata:
   name: echoserver
 spec:
   selector:
-      app.kubernetes.io/name: echoserver
+    app.kubernetes.io/name: echoserver
   ports:
-  - protocol: TCP
-    port: 80
-    targetPort: 80
+    - protocol: TCP
+      port: 80
+      targetPort: 80
